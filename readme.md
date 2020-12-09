@@ -34,7 +34,7 @@ __Día 3,6__
 - Presentación del trabajo realizado
 
 __Día 7__
-- Despliegue en producción (firebase)
+- Despliegue en producción (firebase hosting)
 - Presentación final
 
 ### Requerimientos técnicos
