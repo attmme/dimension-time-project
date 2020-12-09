@@ -1,11 +1,20 @@
 
+#app-header{
+}
 ul{
   display:flex;
   flex-flow: row;
   flex-wrap: wrap;
+  justify-content: center;
+
+  height: 85%;
+  overflow: auto;
+
+
 
   li{
-    margin: 1em;
+    margin: 2em;
+    padding: 1em;
 
     .mat-card{
       display:flex;

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +13,8 @@ import { MaterialModule } from './shared/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HeaderComponent } from './modules/header/header.component';
+import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { HeaderComponent } from './modules/header/header.component';
     HeaderComponent,
     HomeComponent,
     HeaderComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -33,9 +36,10 @@ import { HeaderComponent } from './modules/header/header.component';
     MaterialModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    MatDialogModule,
   ],
-  exports: [CommonModule, MaterialModule],
+  exports: [CommonModule, MaterialModule ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
