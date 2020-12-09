@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TaskListComponent } from './tasks/task-list/task-list.component';
-import { TaskComponent } from './tasks/task/task.component';
+import { TaskListComponent } from './modules/tasks/task-list/task-list.component';
+import { TaskComponent } from './modules/tasks/task/task.component';
 
 @NgModule({
   declarations: [
