@@ -68,6 +68,7 @@ __Día 7__
 Excelencia:
 - La aplicación se ha probado en diferentes dispositivos y navegadores
 - Se introducen componentes de dificultad:
+  - cargar imágenes
   - interceptores
   - content projection
   - animaciones
