@@ -1,0 +1,18 @@
+.mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    width: 60%;
+  }
+
+  #botons_laterals {
+    display: flex;
+    justify-content: flex-end;
+    width: 40%;
+  }
+
+  button {
+    margin-left: 2em;
+  }
+}

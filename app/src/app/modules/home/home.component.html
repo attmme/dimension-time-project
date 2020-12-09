@@ -1,2 +1,15 @@
-<p>home works!</p>
-<a href="/login">login</a>
+<div *ngIf="!scrolled">
+  <img src="https://www.state.gov/wp-content/uploads/2019/04/Japan-2107x1406.jpg" alt="">
+
+
+  <a (click)="saltar('seccio_login')">Saltar al login</a>
+
+</div>
+
+<main class="pagina_main">
+  <section id="seccio_login">
+    <app-loginForm></app-loginForm>
+  </section>
+  <section><a href="/register">Register</a></section>
+</main>
+

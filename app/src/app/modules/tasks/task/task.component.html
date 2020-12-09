@@ -1,2 +1,19 @@
-<p>task works!</p>
-<a href="/home">logout</a>
+<app-header></app-header>
+<ul>
+  <li *ngFor="let dada of dades">
+    <mat-card>
+      <div id="card_cap">
+        <button mat-mini-fab color="primary" (click)="click_borrar_targeta()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      <div id="card_centre" (click)="click_targeta()" >
+        <mat-card-title>{{ dada.nom }}</mat-card-title>
+      </div>
+
+      <div id="card_peu" (click)="click_targeta()">
+        <p>Hours: {{ dada.hores }}</p>
+      </div>
+    </mat-card>
+  </li>
+</ul>
