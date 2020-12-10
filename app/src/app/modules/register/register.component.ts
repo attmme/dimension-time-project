@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -14,13 +15,12 @@ export class RegisterComponent implements OnInit {
   @Output() submitEM = new EventEmitter();
 
   pare_asd: string;
-  temporal: FirebaseService;
 
-  constructor(private trucazo_router: Router) {
+  constructor(private trucazo_router: Router, private fbService: FirebaseService) {
     this.pare_asd = 'test';
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -30,8 +30,8 @@ export class RegisterComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      //this.submitEM.emit(this.form.value);
-      //this.algo.registrar('pepito@pepito.com', '1234');
+      this.submitEM.emit(this.form.value);
+      this.fbService.registrar('pepito@pepito.com', '123456');
     }
 
     // trucazo
