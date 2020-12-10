@@ -16,6 +16,12 @@ import { HeaderComponent } from './modules/header/header.component';
 import { ConfirmDialogComponent } from './shared/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+// Firebase
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +33,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     HeaderComponent,
     HomeComponent,
     HeaderComponent,
-    ConfirmDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -37,9 +43,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    AngularFireModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireAuthModule,
   ],
-  exports: [CommonModule, MaterialModule ],
+  exports: [CommonModule, MaterialModule],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

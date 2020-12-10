@@ -14,8 +14,7 @@ export class RegisterComponent implements OnInit {
     this.pare_asd = 'test';
   }
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void { }
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
