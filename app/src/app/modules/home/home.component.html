@@ -1,15 +1,19 @@
-<div *ngIf="!scrolled">
-  <img src="https://www.state.gov/wp-content/uploads/2019/04/Japan-2107x1406.jpg" alt="">
+<div id="contenedor">
+  <div *ngIf="!scrolled" id="pagina_principal">
+<!--     <button id="boto_login" mat-fab (click)="saltar('seccio_login')" color="primary">
+      Saltar al login
+    </button>
+ -->
+    <section  id="section05" class="demo" >
+      <a (click)="saltar('seccio_login')">Login</a>
+    </section>
 
+  </div>
 
-  <a (click)="saltar('seccio_login')">Saltar al login</a>
+  <main id="pagina_login">
+    <section id="seccio_login">
+      <app-loginForm></app-loginForm>
+    </section>
+  </main>
 
 </div>
-
-<main class="pagina_main">
-  <section id="seccio_login">
-    <app-loginForm></app-loginForm>
-  </section>
-  <section><a href="/register">Register</a></section>
-</main>
-

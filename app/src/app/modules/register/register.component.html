@@ -1,4 +1,5 @@
 <app-header [fill_dada]="pare_asd"></app-header>
+
 <div id="register_form_component">
   <mat-card>
     <mat-card-title>Register</mat-card-title>
@@ -20,7 +21,7 @@
               type="text"
               matInput
               placeholder="Email"
-              formControlName="Email"
+              formControlName="email"
             />
           </mat-form-field>
         </p>
@@ -47,9 +48,9 @@
           </mat-form-field>
         </p>
 
-        <p *ngIf="error" class="error">
+<!--         <p *ngIf="error" class="error">
           {{ error }}
-        </p>
+        </p> -->
 
         <div class="button">
           <button type="submit" mat-raised-button color="primary">Register</button>

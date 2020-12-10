@@ -22,6 +22,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
+import { environment } from './shared/fireBase.auth';
+import { AuthService } from './shared/services/auth.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +36,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     HeaderComponent,
     HomeComponent,
     HeaderComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -46,10 +49,12 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     AngularFireModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
   ],
   exports: [CommonModule, MaterialModule],
-  providers: [],
+
+  providers: [AuthService], // cal?
   bootstrap: [AppComponent]
 })
 export class AppModule { }

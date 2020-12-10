@@ -43,5 +43,18 @@ table {
 	border-spacing: 0;
 }
 
+html::-webkit-scrollbar {
+  display: none;
+}
+
+html{
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

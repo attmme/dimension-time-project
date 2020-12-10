@@ -1,30 +1,91 @@
+import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { Item } from '../interfaces/item';
+import firebase from 'firebase/app';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirebaseService {
 
-  constructor(private fbAuth: AngularFirestore) { }
+  gallina = "asdasd";
+  user: Observable<firebase.User>;
 
-  singUp(email: String, pass: String) {
-  }
-  
-/* 
-  addItem(item: Item): Promise<void> {
-    item.id = this.fbAuth.createId();
-    return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
+  constructor(private firebaseAuth: AngularFireAuth) {
+    this.user = firebaseAuth.authState;
   }
 
-  editItem(item: Item): Promise<void> {
-    item.id = this.fbAuth.createId();
-    return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
+  /* async */
+  registrar(email: string, password: string) {
+    this.firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then((value) => {
+        console.log('Success!', value);
+      })
+      .catch((err) => {
+        console.log('Something went wrong:', err.message);
+      });
   }
 
-  getTotalItems$(): Observable<Item[]> {
-    return this.fbAuth.collection<Item>('todos').valueChanges();
-  } */
+  // addItem(item: Item): Promise<void> {
+  //   item.id = this.fbAuth.createId();
+  //   return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
+  // }
+
+  // editItem(item: Item): Promise<void> {
+  //   item.id = this.fbAuth.createId();
+  //   return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
+  // }
+
+  // getTotalItems$(): Observable<Item[]> {
+  //   return this.fbAuth.collection<Item>('todos').valueChanges();
+  // }
 }
+
+/*
+import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth, AngularFireAuthModule } from "@angular/fire/auth";
+import { Observable } from 'rxjs';
+import { Item } from '../interfaces/item';
+
+@Injectable()
+export class FirebaseService {
+  user: Observable<firebase.User>;
+
+  constructor(private firebaseAuth: AngularFireAuth) {
+    this.user = firebaseAuth.authState;
+  }
+
+  signup(email: string, password: string) {
+    this.firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(value => {
+        console.log('Success!', value);
+      })
+      .catch(err => {
+        console.log('Something went wrong:',err.message);
+      });
+  }
+
+  login(email: string, password: string) {
+    this.firebaseAuth
+      .signInWithEmailAndPassword(email, password)
+      .then(value => {
+        console.log('Nice, it worked!');
+      })
+      .catch(err => {
+        console.log('Something went wrong:',err.message);
+      });
+  }
+
+  logout() {
+    this.firebaseAuth
+      .auth
+      .signOut();
+  }
+
+} */
