@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-// import {MatDialog} from '@angular/material/dialog';
+import { Component, Output, EventEmitter, ViewChild, Renderer2, AfterViewInit, OnInit } from '@angular/core';
+import { Moment } from 'moment';
+import * as moment from 'moment';
+import { MatCalendar } from '@angular/material/datepicker';
 
 
 @Component({
@@ -52,6 +54,10 @@ export class TaskComponent implements OnInit {
   ];
   constructor(/* public dialog: MatDialog */) {}
 
+  @ViewChild('calendar') calendar: MatCalendar<Moment>;
+selectedDate: Moment;
+
+
   ngOnInit(): void {}
 
   click_targeta() {
@@ -61,21 +67,6 @@ export class TaskComponent implements OnInit {
 
   click_borrar_targeta() {
     console.log('click en borrar');
-
-    // const dialogRef = this.dialog.open(DialogContentExampleDialog);
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log(`Botó apretat: ${result}`);
-    // });
   }
 }
-
-
-// @Component({
-//   selector: 'app-confirm-dialog',
-//   templateUrl: '../../../shared/confirm-dialog/confirm-dialog.component.html',
-// })
-
-// export class DialogContentExampleDialog {}
-
 

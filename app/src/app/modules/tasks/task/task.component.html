@@ -1,5 +1,14 @@
 <app-header></app-header>
-<ul>
+
+<!--  -->
+<div class="calendar-wrapper">
+  <mat-calendar #calendar [(selected)]="selectedDate" color="primary">
+  </mat-calendar>
+</div>
+
+
+<!--  -->
+<!-- <ul>
   <li *ngFor="let dada of dades">
     <mat-card>
       <div id="card_cap">
@@ -17,3 +26,4 @@
     </mat-card>
   </li>
 </ul>
+ -->

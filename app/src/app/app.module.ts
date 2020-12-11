@@ -24,6 +24,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { environment } from './shared/fireBase.auth';
 import { AuthService } from './shared/services/auth.service';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { AuthService } from './shared/services/auth.service';
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    MatMomentDateModule,
+    MatDatepickerModule
   ],
   exports: [CommonModule, MaterialModule],
 
