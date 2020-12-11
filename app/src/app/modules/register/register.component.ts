@@ -14,19 +14,17 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  constructor(private trucazo_router: Router, private fbService: FirebaseService) {
-    //this.pare_asd = 'test';
-  }
+  constructor(private trucazo_router: Router, private fbService: FirebaseService) { }
 
   // Formulari
-  pare_asd: string; // Fa falta?
   usuari: string;
   email: string;
   pass1: string;
   pass2: string;
 
   // Validació camps
-  valid = false;
+  validUser: boolean;
+  errorList = ['El campo está vacío', 'Introduce mínimo 6 carácteres', 'Introduce mínimo 8 carácteres']
 
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
@@ -34,32 +32,61 @@ export class RegisterComponent implements OnInit {
     password: new FormControl(''),
   });
 
+
   submit() {
+    this.validUser = true;
     this.checkUser(); // Mirar com guardar user després
     this.checkMail();
     this.checkPass1();
     this.checkPass2();
+
+    if (this.validUser) {
+      console.log("Enviar formulari ");
+      //this.fbService.registrar('this.email', 'this.pass1');
+    }
+
+
     //if (this.form.valid) {
     //this.submitEM.emit(this.form.value);
-    //this.fbService.registrar('pepito@pepito.com', '123456'); APAGAT
     //}
     // trucazo
     // this.trucazo_router.navigateByUrl('/tasks');
   }
 
   checkUser() {
+    let u = this.usuari;
 
+    if (u == undefined || u.length <= 3 || u.length > 20) {
+      this.validUser = false;
+      console.log("Debug: error amb l'usuari.")
+    }
   }
 
   checkMail() {
-
+    let m = this.email;
+    if (m == undefined) {
+      this.validUser = false;
+      console.log("Debug: error amb el mail.")
+    }
   }
 
   checkPass1() {
+    let p1 = this.pass1;
 
+    if (p1 == undefined) {
+      this.validUser = false;
+      console.log("Debug: error amb el primer pass.")
+    }
   }
 
   checkPass2() {
+    let p2 = this.pass2;
+
+    if (p2 == undefined || p2 != this.pass1) {
+      this.validUser = false;
+      console.log("Debug: error amb el segon pass.")
+    }
+
 
   }
 
