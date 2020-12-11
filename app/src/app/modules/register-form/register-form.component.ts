@@ -27,7 +27,7 @@ export class RegisterFormComponent implements OnInit {
   ngOnInit(): void {
 
     this.registerForm = this.formBuilder.group({
-      usuari_form: ['', [Validators.required]],
+      usuari_form: ['', [Validators.required, Validators.minLength(2)]],
       email_form: ['', [Validators.required, Validators.email]],
       password_form: ['', [Validators.required, Validators.minLength(6)]],
       password_check_form: ['', [Validators.required, Validators.minLength(6)]],
@@ -51,7 +51,7 @@ export class RegisterFormComponent implements OnInit {
     }
 
     console.log("Enviar formulari, dades: ", this.registerForm.value.usuari_form);
-    //this.fbService.registrar(this.usuari, this.email, this.pass1);
+    //this.fbService.registrar(this.registerForm.value.usuari_form, this.registerForm.value.email_form, this.registerForm.value.password_form);
     //this.trucazo_router.navigateByUrl('/tasks'); // trucazo
   }
 

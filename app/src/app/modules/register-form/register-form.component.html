@@ -14,6 +14,7 @@
                         <div *ngIf="submitted && funcio_formulari.usuari_form.errors" class="invalid-feedback">
                             <div *ngIf="funcio_formulari.usuari_form.errors.required">Username is required</div>
                             <div *ngIf="funcio_formulari.usuari_form.errors.usuari_form">Must be valid</div>
+                            <div *ngIf="funcio_formulari.usuari_form.errors.minlength"> At least 2 characters </div>
                         </div>
                     </mat-form-field>
                 </p>
@@ -51,10 +52,11 @@
                         <input matInput required minlength="6" placeholder="Repeat password" type="password"
                             formControlName="password_check_form" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && funcio_formulari.password_check_form.errors }" />
+                            
                         <div *ngIf="submitted && funcio_formulari.password_check_form.errors" class="invalid-feedback">
                             <div *ngIf="funcio_formulari.password_check_form.errors.required">Password is required</div>
-                            <div *ngIf="funcio_formulari.password_check_form.errors.minlength"> At least 6 characters
-                            </div>
+                            <div *ngIf="funcio_formulari.password_check_form.errors.minlength"> At least 6 characters</div>
+                            <div *ngIf="funcio_formulari.password_form.value != funcio_formulari.password_check_form.value">Password mismatch</div>
                             <!-- mirar que coincideixin els passwords -->
                         </div>
                     </mat-form-field>

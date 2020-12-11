@@ -26,7 +26,6 @@ export class FirebaseService {
         collection.doc(value.user.uid).set({
           email: email,
           user: user,
-          tasks: "Array amb tasques" // MODIFICAR, organitzar primer la BDD
         });
       })
       .catch((err) => {
