@@ -12,10 +12,13 @@
     border-radius: 1em;
 
     .mat-card-title {
+      /* border: 1px solid red; */
+
       display: flex;
       justify-content: center;
 
       padding-top: 1em;
+      padding-right:0.3em;
       font-size: 27px;
     }
 
