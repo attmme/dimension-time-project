@@ -31,12 +31,17 @@ export class FirebaseService {
                   nombre: "nom_usuari",
                 }); */
 
-        return new Promise<any>((resolve, reject) => {
-          this.firestore
-            .collection("users")
-            .add({ email: "ola@gmail.com", user: "usuari" })
-            .then(res => { }, err => reject(err));
+        //return new Promise<any>((resolve, reject) => {
+        console.log("ESTIC DINS")
+        let temp = this.firestore.collection("users");
+        temp.doc("D4j0I4ZmEOF6eQP9WM1q2").set({
+          email: "ola@gmail.com",
+          user: "usuari"
         });
+
+        /*             .add({ email: "ola@gmail.com", user: "usuari" })
+                    .then(res => { }, err => reject(err)); */
+        //});
 
       })
       .catch((err) => {
