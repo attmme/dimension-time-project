@@ -10,8 +10,6 @@ import firebase from 'firebase/app';
   providedIn: 'root',
 })
 export class FirebaseService {
-
-  gallina = "asdasd";
   user: Observable<firebase.User>;
 
   constructor(private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore) {
@@ -23,34 +21,20 @@ export class FirebaseService {
     this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
-        console.log('Success!', value);
+        console.log('Success!', value); // BORRAR
 
-        console.log("ESTIC DINS")
-        let temp = this.firestore.collection("users");
-        temp.doc(value.user.uid).set({
+        // S'afegeix a la colecció users (bdd) un nou document (taula) amb la id de l'usuari registrat
+        let collection = this.firestore.collection("users");
+        collection.doc(value.user.uid).set({
           email: email,
-          user: user
+          user: user,
+          tasks: "Array amb tasques" // MODIFICAR
         });
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
       });
   }
-
-
-  // addItem(item: Item): Promise<void> {
-  //   item.id = this.fbAuth.createId();
-  //   return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
-  // }
-
-  // editItem(item: Item): Promise<void> {
-  //   item.id = this.fbAuth.createId();
-  //   return this.fbAuth.collection<Item>('todos').doc(item.id).set(item);
-  // }
-
-  // getTotalItems$(): Observable<Item[]> {
-  //   return this.fbAuth.collection<Item>('todos').valueChanges();
-  // }
 }
 
 /*
@@ -68,16 +52,6 @@ export class FirebaseService {
     this.user = firebaseAuth.authState;
   }
 
-  signup(email: string, password: string) {
-    this.firebaseAuth
-      .createUserWithEmailAndPassword(email, password)
-      .then(value => {
-        console.log('Success!', value);
-      })
-      .catch(err => {
-        console.log('Something went wrong:',err.message);
-      });
-  }
 
   login(email: string, password: string) {
     this.firebaseAuth
