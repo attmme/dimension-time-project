@@ -1,19 +1,11 @@
 <div id="contenedor">
   <div *ngIf="!scrolled" id="pagina_principal">
-<!--     <button id="boto_login" mat-fab (click)="saltar('seccio_login')" color="primary">
-      Saltar al login
-    </button>
- -->
-    <section  id="section05" class="demo" >
-      <a (click)="saltar('seccio_login')">Login</a>
+    <section id="section05" class="demo">
+      <a (click)="saltar('pagina_login')">Login</a>
     </section>
-
   </div>
 
   <main id="pagina_login">
-    <section id="seccio_login">
-      <app-loginForm></app-loginForm>
-    </section>
+    <app-loginForm></app-loginForm>
   </main>
-
 </div>

@@ -4,7 +4,7 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 
-/*  */
+
 
 .demo {
   a {
@@ -27,30 +27,29 @@
 }
 
 #section05 {
-
   a {
-    padding-top: 70px;
-  border: 1px solid red;
-
+    margin-top: 70px;
+    /*
+    border: 1px solid red;
+    */
+    span {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 24px;
+      height: 24px;
+      margin-left: -12px;
+      border-left: 1px solid #fff;
+      border-bottom: 1px solid #fff;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-animation: animacio 1.5s infinite;
+      animation: animacio 1.5s infinite;
+      box-sizing: border-box;
+    }
   }
   a:hover {
     cursor: pointer;
-  }
-
-  a span {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 24px;
-    height: 24px;
-    margin-left: -12px;
-    border-left: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-    -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    -webkit-animation: sdb05 1.5s infinite;
-    animation: sdb05 1.5s infinite;
-    box-sizing: border-box;
   }
 }
 
@@ -60,12 +59,12 @@
   left: 0;
   content: "";
   width: 100%;
-  height: 50%;
-  /* background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0.8) 100%); */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.8) 80%, rgba(0, 0, 0, 0.8) 100%);
+  height: 60%;
+  /* background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.8) 100%, rgba(0, 0, 0, 0.8) 80%); */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0.8) 30%);
 }
 
-@-webkit-keyframes sdb05 {
+/* @-webkit-keyframes animacio {
   0% {
     -webkit-transform: rotate(-45deg) translate(0, 0);
     opacity: 0;
@@ -78,7 +77,7 @@
     opacity: 0;
   }
 }
-@keyframes sdb05 {
+@keyframes animacio {
   0% {
     transform: rotate(-45deg) translate(0, 0);
     opacity: 0;
@@ -90,9 +89,9 @@
     transform: rotate(-45deg) translate(-20px, 20px);
     opacity: 0;
   }
-}
+} */
 
-/*  */
+
 #contenedor {
   background-image: url("https://www.state.gov/wp-content/uploads/2019/04/Japan-2107x1406.jpg");
   background-repeat: no-repeat;
@@ -115,21 +114,12 @@
       justify-content: center;
     }
 
+    a {
+      color: white;
+    }
     a:hover {
       cursor: pointer;
     }
   }
-
-/*   #boto_login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  } */
-
-  a {
-    color: white;
-  }
 }
-
 /* ------------------------------------------- */

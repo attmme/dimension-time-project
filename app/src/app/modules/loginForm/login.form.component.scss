@@ -2,5 +2,45 @@
   display: flex;
   justify-content: center;
 
+  .mat-card {
+    /* display:flex; */
+    justify-content: center;
 
+    width: 15em;
+    height: 25em;
+    border-radius: 1em;
+
+    .mat-card-title {
+      padding-top: 1em;
+      font-size: 27px;
+    }
+
+    .mat-card-content {
+      display: flex;
+      height: 90%;
+
+      form {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: space-around;
+        height: 90%;
+
+        button {
+          width: 10em;
+          font-size: 19px;
+        }
+      }
+    }
+
+    a {
+      color: white;
+      font-size: 17px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    a:hover {
+      opacity: 0.5;
+    }
+  }
 }
