@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
       this.fbService.registrar(this.usuari, this.email, this.pass1);
     }
 
-
     //if (this.form.valid) {
     //this.submitEM.emit(this.form.value);
     //}
@@ -55,10 +54,9 @@ export class RegisterComponent implements OnInit {
 
   checkUser() {
     let u = this.usuari;
-
     if (u == undefined || u.length <= 3 || u.length > 20) {
       this.validUser = false;
-      console.log("Debug: error amb l'usuari.")
+      console.log("Debug: error amb l'usuari.") // BORRAR
     }
   }
 
@@ -66,29 +64,26 @@ export class RegisterComponent implements OnInit {
     let m = this.email;
     if (m == undefined) {
       this.validUser = false;
-      console.log("Debug: error amb el mail.")
+      console.log("Debug: error amb el mail.") // BORRAR
     }
   }
 
   checkPass1() {
     let p1 = this.pass1;
-
-    if (p1 == undefined) {
+    if (p1 == undefined || p1.length < 6 || p1.length > 30) {
       this.validUser = false;
-      console.log("Debug: error amb el primer pass.")
+      console.log("Debug: error amb el primer pass.") // BORRAR
     }
   }
 
   checkPass2() {
     let p2 = this.pass2;
-
     if (p2 == undefined || p2 != this.pass1) {
       this.validUser = false;
-      console.log("Debug: error amb el segon pass.")
+      console.log("Debug: error amb el segon pass.") // BORRAR
     }
 
 
   }
-
 
 }
