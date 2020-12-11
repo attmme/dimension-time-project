@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core'; //CUSTOM_ELEMENTS_SCHEMA, 
 import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core'; // CUSTOM_ELEMENTS_SCHEMA
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TaskListComponent } from './modules/tasks/task-list/task-list.component';
