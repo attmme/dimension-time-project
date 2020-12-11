@@ -40,10 +40,10 @@ export class RegisterComponent implements OnInit {
     this.checkPass1();
     this.checkPass2();
 
-    //if (this.validUser) {
+    if (this.validUser) {
       console.log("Enviar formulari ");
-      this.fbService.registrar(this.email, this.pass1);
-    //}
+      this.fbService.registrar(this.usuari, this.email, this.pass1);
+    }
 
 
     //if (this.form.valid) {

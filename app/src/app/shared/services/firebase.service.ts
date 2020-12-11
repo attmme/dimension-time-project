@@ -19,30 +19,18 @@ export class FirebaseService {
   }
 
   /* async */
-  registrar(email: string, password: string) {
+  registrar(user:string, email: string, password: string) {
     this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         console.log('Success!', value);
 
-        /*         const ref_tienda = this.db.collection('users');
-                ref_tienda.doc("D4j0I4ZmEOF6eQP9WM1q").set({
-                  email: email,
-                  nombre: "nom_usuari",
-                }); */
-
-        //return new Promise<any>((resolve, reject) => {
         console.log("ESTIC DINS")
         let temp = this.firestore.collection("users");
-        temp.doc("D4j0I4ZmEOF6eQP9WM1q2").set({
-          email: "ola@gmail.com",
-          user: "usuari"
+        temp.doc(value.user.uid).set({
+          email: email,
+          user: user
         });
-
-        /*             .add({ email: "ola@gmail.com", user: "usuari" })
-                    .then(res => { }, err => reject(err)); */
-        //});
-
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
