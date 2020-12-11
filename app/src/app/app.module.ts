@@ -26,6 +26,7 @@ import { environment } from './shared/fireBase.auth';
 import { AuthService } from './shared/services/auth.service';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RegisterFormComponent } from './modules/register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     HomeComponent,
     HeaderComponent,
     ConfirmDialogComponent,
+    RegisterFormComponent,
   ],
   imports: [
     CommonModule,
