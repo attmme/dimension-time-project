@@ -1,9 +1,9 @@
-import { UserService } from './user.service';
+//import { UserService } from './user.service';
+//import { Item } from '../interfaces/item';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { Item } from '../interfaces/item';
 import firebase from 'firebase/app';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class FirebaseService {
   gallina = "asdasd";
   user: Observable<firebase.User>;
 
-  constructor(private firebaseAuth: AngularFireAuth) {
+  constructor(private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore) {
     this.user = firebaseAuth.authState;
   }
 
@@ -24,11 +24,26 @@ export class FirebaseService {
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         console.log('Success!', value);
+
+        /*         const ref_tienda = this.db.collection('users');
+                ref_tienda.doc("D4j0I4ZmEOF6eQP9WM1q").set({
+                  email: email,
+                  nombre: "nom_usuari",
+                }); */
+
+        return new Promise<any>((resolve, reject) => {
+          this.firestore
+            .collection("users")
+            .add({ email: "ola@gmail.com", user: "usuari" })
+            .then(res => { }, err => reject(err));
+        });
+
       })
       .catch((err) => {
         console.log('Something went wrong:', err.message);
       });
   }
+
 
   // addItem(item: Item): Promise<void> {
   //   item.id = this.fbAuth.createId();
