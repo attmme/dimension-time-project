@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
 
     if (this.validUser) {
       console.log("Enviar formulari ");
-      //this.fbService.registrar('this.email', 'this.pass1');
+      this.fbService.registrar(this.email, this.pass1);
     }
 
 

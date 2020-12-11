@@ -4,8 +4,6 @@
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 
-
-
 .demo {
   a {
     position: absolute;
@@ -21,6 +19,7 @@
     text-decoration: none;
     transition: opacity 0.3s;
   }
+
   a:hover {
     opacity: 0.5;
   }
@@ -29,10 +28,7 @@
 #section05 {
   a {
     margin-top: 70px;
-    /*
-    border: 1px solid red;
-    */
-    span {
+    /*     span {
       position: absolute;
       top: 0;
       left: 50%;
@@ -46,8 +42,9 @@
       -webkit-animation: animacio 1.5s infinite;
       animation: animacio 1.5s infinite;
       box-sizing: border-box;
-    }
+    } */
   }
+
   a:hover {
     cursor: pointer;
   }
@@ -117,9 +114,11 @@
     a {
       color: white;
     }
+
     a:hover {
       cursor: pointer;
     }
   }
 }
+
 /* ------------------------------------------- */
