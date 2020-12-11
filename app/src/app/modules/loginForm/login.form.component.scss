@@ -3,9 +3,6 @@
   justify-content: center;
 
   .mat-card {
-    /* display:flex; */
-    justify-content: center;
-
     width: 15em;
     height: 25em;
     border-radius: 1em;
@@ -17,7 +14,9 @@
 
     .mat-card-content {
       display: flex;
-      height: 90%;
+      height: 85%;
+      align-items: flex-end;
+      justify-content: center;
 
       form {
         display: flex;
@@ -30,6 +29,16 @@
           width: 10em;
           font-size: 19px;
         }
+      }
+
+      #id_boto_i_registre {
+        display: flex;
+        flex-flow: column;
+        width: 100%;
+        height: 30%;
+
+        align-items: center;
+        justify-content: space-between;
       }
     }
 

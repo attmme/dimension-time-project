@@ -29,7 +29,7 @@
     }
   }
 
-  #section05 {
+  section {
     height: 100vh;
     display: flex;
     flex-flow: column;
@@ -53,7 +53,7 @@
     }
   }
 
-  #section05::after {
+  section::after {
     position: absolute;
     bottom: 0;
     left: 0;
