@@ -122,6 +122,8 @@
             Register
           </button>
           <mat-hint><a href="/login">Already registered?</a></mat-hint>
+
+          <mat-error *ngIf="resposta_server==1">User already exists</mat-error>
         </div>
       </form>
     </mat-card-content>

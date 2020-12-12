@@ -19,6 +19,7 @@ export class RegisterFormComponent implements OnInit {
   submitted = false;
   // </nou>
 
+  resposta_server = 0;
 
   constructor(private trucazo_router: Router, private fbService: FirebaseService,
     private formBuilder: FormBuilder) { }
@@ -52,7 +53,7 @@ export class RegisterFormComponent implements OnInit {
         this.registerForm.value.email_form,
         this.registerForm.value.password_form).catch((err) => {
           if (err.code == "auth/email-already-in-use")
-            console.log('El mail ja existeix.'); // Treure pel front-end
+            this.resposta_server = 1;
         })
     } else {
       return;
