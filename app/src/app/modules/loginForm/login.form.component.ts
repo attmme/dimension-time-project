@@ -1,6 +1,11 @@
 //import { EventEmitter } from 'events';
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
@@ -17,11 +22,12 @@ export class LoginFormComponent implements OnInit {
     private trucazo_router: Router,
     private formBuilder: FormBuilder,
     private fbService: FirebaseService
-  ) { }
+  ) {}
 
   // Variables
   registerForm: FormGroup;
   submitted = false;
+  resposta_server = 0;
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -46,21 +52,29 @@ export class LoginFormComponent implements OnInit {
       let e = this.registerForm.value.email;
       let p = this.registerForm.value.password;
 
-      this.fbService.login(e, p).then(() => {
-        this.trucazo_router.navigateByUrl('/tasks');
-      }).catch((err) => {
-        if (err.code == "auth/user-not-found")
-          console.log("El mail no existeix") // Treure pel front-end
-        else if (err.code == "auth/wrong-password")
-          console.log("Pass incorrecte") // Treure pel front-end
-
-      });
+      this.fbService
+        .login(e, p)
+        .then(() => {
+          this.resposta_server = 0; // resetejem
+          this.trucazo_router.navigateByUrl('/tasks');
+        })
+        .catch((err) => {
+          if (err.code == 'auth/user-not-found') {
+            console.log('El mail no existeix');
+            this.resposta_server = 1;
+          }
+          // Treure pel front-end
+          else if (err.code == 'auth/wrong-password') {
+            console.log('Pass incorrecte'); // Treure pel front-end
+            this.resposta_server = 2;
+          }
+        });
     } else {
       return; // No envia res si el form és incorrecte
     }
 
     // Possiblement BORRAR
-    /*     
+    /*
     if (this.form.valid) {
       console.log("Dins del form valid")
 
@@ -71,7 +85,5 @@ export class LoginFormComponent implements OnInit {
      */
     // Possiblement BORRAR
     this.submitted = true;
-
   }
-
 }
