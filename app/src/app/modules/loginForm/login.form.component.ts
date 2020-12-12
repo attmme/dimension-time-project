@@ -1,11 +1,6 @@
+//import { EventEmitter } from 'events';
 import { Component, Input, OnInit, Output } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
-import { EventEmitter } from 'events';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/shared/services/firebase.service';
 
@@ -15,68 +10,63 @@ import { FirebaseService } from 'src/app/shared/services/firebase.service';
   styleUrls: ['./login.form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
-  //
   @Input() error: string | null;
-  @Output() submitEM = new EventEmitter();
+  //@Output() submitEM = new EventEmitter();
 
-  // <nou>
-  registerForm: FormGroup;
-  submitted = false;
-  // </nou>
-  //--------------------------------------------------nou
   constructor(
     private trucazo_router: Router,
     private formBuilder: FormBuilder,
     private fbService: FirebaseService
   ) { }
 
+  // Variables
+  registerForm: FormGroup;
+  submitted = false;
+
   ngOnInit(): void {
-    // <nou>
     this.registerForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
-    // </nou>
   }
-  // <nou>
-  get f() { // mirem el tema d'errors en password/email, tamanys, etc
+
+  // Es miren els errors en password/email, tamanys, etc
+  get f() {
     return this.registerForm.controls;
   }
-  // </nou>
 
-  // <---- provar>
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
   });
 
   submit() {
-    // Fer logueo
-    console.log("Enviar formulari ");
-    let email = this.registerForm.value.email;
-    let pass = this.registerForm.value.password;
+    // Si el format és vàlid, fa l'intent de login
+    if (!this.registerForm.invalid) {
+      let e = this.registerForm.value.email;
+      let p = this.registerForm.value.password;
 
-    this.fbService.login(email, pass).then(() => {
-      this.trucazo_router.navigateByUrl('/tasks');
-    }).catch(() => {
-      // Retornar usuari incorrecte
-      console.log("USUARI INCORRECTE")
-    });
+      this.fbService.login(e, p).then(() => {
+        this.trucazo_router.navigateByUrl('/tasks');
+      }).catch(() => {
+        console.log("USUARI INCORRECTE") // Treure pel front-end
+      });
+    } else {
+      return; // No es deixa continuar
+    }
 
     // Possiblement BORRAR
+    /*     
+    if (this.form.valid) {
+      console.log("Dins del form valid")
 
-    /* if (this.form.valid) {
       this.submitEM.emit(this.form.value);
-    } */
-
+    } else {
+      console.log("Dins del else form valid")
+    }
+     */
     // Possiblement BORRAR
     this.submitted = true;
-
-    // Possiblement BORRAR
-    // stop here if form is invalid
-    if (this.registerForm.invalid) {
-      return;
-    }
 
   }
 

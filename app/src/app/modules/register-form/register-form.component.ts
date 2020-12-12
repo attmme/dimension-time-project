@@ -51,7 +51,7 @@ export class RegisterFormComponent implements OnInit {
     }
 
     console.log("Enviar formulari, dades: ", this.registerForm.value.usuari_form);
-    //this.fbService.registrar(this.registerForm.value.usuari_form, this.registerForm.value.email_form, this.registerForm.value.password_form);
+    this.fbService.registrar(this.registerForm.value.usuari_form, this.registerForm.value.email_form, this.registerForm.value.password_form);
     //this.trucazo_router.navigateByUrl('/tasks'); // trucazo
   }
 
