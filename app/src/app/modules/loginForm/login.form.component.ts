@@ -48,11 +48,15 @@ export class LoginFormComponent implements OnInit {
 
       this.fbService.login(e, p).then(() => {
         this.trucazo_router.navigateByUrl('/tasks');
-      }).catch(() => {
-        console.log("USUARI INCORRECTE") // Treure pel front-end
+      }).catch((err) => {
+        if (err.code == "auth/user-not-found")
+          console.log("El mail no existeix") // Treure pel front-end
+        else if (err.code == "auth/wrong-password")
+          console.log("Pass incorrecte") // Treure pel front-end
+
       });
     } else {
-      return; // No es deixa continuar
+      return; // No envia res si el form és incorrecte
     }
 
     // Possiblement BORRAR
