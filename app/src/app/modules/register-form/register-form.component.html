@@ -1,79 +1,129 @@
 <div id="register_form_component">
-    <mat-card>
-        <mat-card-title>Register</mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="registerForm" (ngSubmit)="submit()">
+  <mat-card>
+    <mat-card-title>Register</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="submit()">
+        <!-- Usuari -->
+        <p>
+          <mat-form-field class="form-group">
+            <input
+              required
+              matInput
+              placeholder="Username"
+              type="text"
+              formControlName="usuari_form"
+              class="form-control"
+            />
 
+            <mat-error *ngIf="registerForm.hasError('required', 'usuari_form')">
+              Username is required
+            </mat-error>
 
-                <p>
-                    <mat-form-field class="form-group">
-                        <input required minlength="1" matInput placeholder="Username" type="text"
-                            formControlName="usuari_form" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && funcio_formulari.usuari_form.errors }" />
+            <mat-error
+              *ngIf="registerForm.hasError('minlength', 'usuari_form')"
+            >
+              At least 2 characters
+            </mat-error>
+          </mat-form-field>
+        </p>
 
-                        <div *ngIf="submitted && funcio_formulari.usuari_form.errors" class="invalid-feedback">
-                            <div *ngIf="funcio_formulari.usuari_form.errors.required">Username is required</div>
-                            <div *ngIf="funcio_formulari.usuari_form.errors.usuari_form">Must be valid</div>
-                            <div *ngIf="funcio_formulari.usuari_form.errors.minlength"> At least 2 characters </div>
-                        </div>
-                    </mat-form-field>
-                </p>
+        <!-- Email -->
+        <p>
+          <mat-form-field class="form-group">
+            <input
+              required
+              matInput
+              placeholder="Email"
+              type="text"
+              formControlName="email_form"
+              class="form-control"
+            />
 
+            <mat-error *ngIf="registerForm.hasError('required', 'email_form')">
+              Email is required
+            </mat-error>
 
-                <p>
-                    <mat-form-field class="form-group">
-                        <input required minlength="1" matInput placeholder="Email" type="text"
-                            formControlName="email_form" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && funcio_formulari.email_form.errors }" />
+            <mat-error *ngIf="registerForm.hasError('email', 'email_form')">
+              Must be valid
+            </mat-error>
+          </mat-form-field>
+        </p>
 
-                        <div *ngIf="submitted && funcio_formulari.email_form.errors" class="invalid-feedback">
-                            <div *ngIf="funcio_formulari.email_form.errors.required">Email is required</div>
-                            <div *ngIf="funcio_formulari.email_form.errors.email_form">Must be valid</div>
-                        </div>
-                    </mat-form-field>
-                </p>
+        <!-- Password -->
+        <p>
+          <mat-form-field class="form-group">
+            <input
+              required
+              matInput
+              placeholder="Password"
+              type="password"
+              formControlName="password_form"
+              class="form-control"
+            />
 
+            <mat-error
+              *ngIf="registerForm.hasError('required', 'password_form')"
+            >
+              Password is required
+            </mat-error>
 
+            <mat-error
+              *ngIf="registerForm.hasError('minlength', 'password_form')"
+            >
+              At least 6 characters
+            </mat-error>
+          </mat-form-field>
+        </p>
 
-                <p>
-                    <mat-form-field class="form-group">
-                        <input matInput required minlength="6" placeholder="Password" type="password"
-                            formControlName="password_form" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && funcio_formulari.password_form.errors }" />
-                        <div *ngIf="submitted && funcio_formulari.password_form.errors" class="invalid-feedback">
-                            <div *ngIf="funcio_formulari.password_form.errors.required">Password is required</div>
-                            <div *ngIf="funcio_formulari.password_form.errors.minlength"> At least 6 characters </div>
-                        </div>
-                    </mat-form-field>
-                </p>
+        <!-- Password check -->
+        <p>
+          <mat-form-field class="form-group">
+            <input
+              required
+              matInput
+              placeholder="Repeat password"
+              type="password"
+              formControlName="password_check_form"
+              class="form-control"
+            />
 
-                <p>
-                    <mat-form-field class="form-group">
-                        <input matInput required minlength="6" placeholder="Repeat password" type="password"
-                            formControlName="password_check_form" class="form-control"
-                            [ngClass]="{ 'is-invalid': submitted && funcio_formulari.password_check_form.errors }" />
-                            
-                        <div *ngIf="submitted && funcio_formulari.password_check_form.errors" class="invalid-feedback">
-                            <div *ngIf="funcio_formulari.password_check_form.errors.required">Password is required</div>
-                            <div *ngIf="funcio_formulari.password_check_form.errors.minlength"> At least 6 characters</div>
-                            <div *ngIf="funcio_formulari.password_form.value != funcio_formulari.password_check_form.value">Password mismatch</div>
-                            <!-- mirar que coincideixin els passwords -->
-                        </div>
-                    </mat-form-field>
-                </p>
+            <mat-error
+              *ngIf="registerForm.hasError('required', 'password_form')"
+            >
+              Password is required
+            </mat-error>
 
-                <div class="form-group" id="id_boto_i_registre">
+            <mat-error
+              *ngIf="registerForm.hasError('minlength', 'password_form')"
+            >
+              At least 6 characters
+            </mat-error>
 
-                    <button [disabled]="false" type="submit" mat-raised-button color="primary">
-                        <!-- arreglar lo de disabled false -->
-                        Register
-                    </button>
-                    <mat-hint><a href="/login">Already registered?</a></mat-hint>
-                </div>
+            <mat-error
+              *ngIf="
+                registerForm.controls['password_check_form'].hasError(
+                  'diferents'
+                )
+              "
+            >
+              Password mismatch
+            </mat-error>
+          </mat-form-field>
+        </p>
 
-            </form>
-
-        </mat-card-content>
-
-    </mat-card>
+        <div class="form-group" id="id_boto_i_registre">
+          <button
+            [disabled]="false"
+            type="submit"
+            mat-raised-button
+            color="primary"
+          >
+            <!-- arreglar lo de disabled false -->
+            Register
+          </button>
+          <mat-hint><a href="/login">Already registered?</a></mat-hint>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>
