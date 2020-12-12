@@ -1,13 +1,8 @@
 //import { EventEmitter } from 'events';
 import { Component, Input, OnInit, Output } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
-import { FirebaseService } from 'src/app/shared/services/firebase.service';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-loginForm',
@@ -19,9 +14,9 @@ export class LoginFormComponent implements OnInit {
   //@Output() submitEM = new EventEmitter();
 
   constructor(
-    private trucazo_router: Router,
-    private formBuilder: FormBuilder,
-    private fbService: FirebaseService
+    public trucazo_router: Router,
+    public formBuilder: FormBuilder,
+    public service: AuthService
   ) {}
 
   // Variables
@@ -52,23 +47,22 @@ export class LoginFormComponent implements OnInit {
       let e = this.registerForm.value.email;
       let p = this.registerForm.value.password;
 
-      this.fbService
-        .login(e, p)
-        .then(() => {
-          this.resposta_server = 0; // resetejem
-          this.trucazo_router.navigateByUrl('/tasks');
-        })
-        .catch((err) => {
-          if (err.code == 'auth/user-not-found') {
-            console.log('El mail no existeix');
-            this.resposta_server = 1;
-          }
-          // Treure pel front-end
-          else if (err.code == 'auth/wrong-password') {
-            console.log('Pass incorrecte'); // Treure pel front-end
-            this.resposta_server = 2;
-          }
-        });
+      this.service.login(e, p).then(() => {
+        this.resposta_server = 0; // resetejem
+        this.service.canviarEstat(true);             // ARREGLAR
+        this.trucazo_router.navigateByUrl('/tasks');
+      })
+      .catch((err) => {
+        if (err.code == 'auth/user-not-found') {
+          console.log('El mail no existeix');
+          this.resposta_server = 1;
+        }
+        // Treure pel front-end
+        else if (err.code == 'auth/wrong-password') {
+          console.log('Pass incorrecte'); // Treure pel front-end
+          this.resposta_server = 2;
+        }
+      });
     } else {
       return; // No envia res si el form és incorrecte
     }

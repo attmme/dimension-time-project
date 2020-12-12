@@ -27,18 +27,19 @@ import { AuthService } from './shared/services/auth.service';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegisterFormComponent } from './modules/register-form/register-form.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 @NgModule({
   declarations: [
     AppComponent,
+    TaskComponent,
     TaskListComponent,
 
     LoginFormComponent,
     RegisterComponent,
-    TaskComponent,
+
     HeaderComponent,
     HomeComponent,
-    HeaderComponent,
     ConfirmDialogComponent,
     RegisterFormComponent,
   ],
@@ -56,11 +57,11 @@ import { RegisterFormComponent } from './modules/register-form/register-form.com
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     MatMomentDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   exports: [CommonModule, MaterialModule],
 
-  providers: [AuthService], // cal?
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
