@@ -41,18 +41,22 @@ export class RegisterFormComponent implements OnInit {
   // Validació camps
   validUser: boolean;
 
-
   submit() {
-    // this.submitted = true;
 
-
-    if (this.registerForm.invalid) { // si és invàlid no seguim
+    // Si és invàlid no seguim
+    if (!this.registerForm.invalid) {
+      this.fbService.registrar(
+        this.registerForm.value.usuari_form,
+        this.registerForm.value.email_form,
+        this.registerForm.value.password_form).catch((err) => {
+          if (err.code == "auth/email-already-in-use")
+            console.log('El mail ja existeix.'); // Treure pel front-end
+        })
+    } else {
       return;
     }
-
-    console.log("Enviar formulari, dades: ", this.registerForm.value.usuari_form);
-    this.fbService.registrar(this.registerForm.value.usuari_form, this.registerForm.value.email_form, this.registerForm.value.password_form);
     //this.trucazo_router.navigateByUrl('/tasks'); // trucazo
+    // this.submitted = true;
   }
 
 

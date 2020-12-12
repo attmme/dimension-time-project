@@ -18,7 +18,7 @@ export class FirebaseService {
 
   // Registro
   registrar(user:string, email: string, password: string) {
-    this.firebaseAuth
+    return this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         // S'afegeix a la colecció users (bdd) un nou document (taula) amb la id de l'usuari registrat
@@ -26,10 +26,7 @@ export class FirebaseService {
         collection.doc(value.user.uid).set({
           email: email,
           user: user,
-        });
-      })
-      .catch((err) => {
-        //console.log('Something went wrong:', err.message);
+        })
       });
   }
 
