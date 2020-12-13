@@ -2,6 +2,7 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
+import { userInfo } from 'os';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -47,19 +48,18 @@ export class LoginFormComponent implements OnInit {
       let e = this.registerForm.value.email;
       let p = this.registerForm.value.password;
 
-      this.service.login(e, p).then(() => {
+      this.service.login(e, p).then(el => {
         this.resposta_server = 0; // resetejem
-        this.service.canviarEstat(true);             // ARREGLAR
+
+        console.log("Element: " );
+        this.service.setToken(JSON.stringify(el.user.uid))
+
         this.trucazo_router.navigateByUrl('/tasks');
       })
       .catch((err) => {
         if (err.code == 'auth/user-not-found') {
-          console.log('El mail no existeix');
           this.resposta_server = 1;
-        }
-        // Treure pel front-end
-        else if (err.code == 'auth/wrong-password') {
-          console.log('Pass incorrecte'); // Treure pel front-end
+        } else if (err.code == 'auth/wrong-password') {
           this.resposta_server = 2;
         }
       });

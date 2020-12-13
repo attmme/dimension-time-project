@@ -1,5 +1,6 @@
 //import { UserService } from './user.service';
 //import { Item } from '../interfaces/item';
+//import { FirebaseApp } from '@angular/fire';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,7 +13,10 @@ import firebase from 'firebase/app';
 export class FirebaseService {
   user: Observable<firebase.User>;
 
-  constructor(private firebaseAuth: AngularFireAuth, private firestore: AngularFirestore) {
+  constructor(
+    private firebaseAuth: AngularFireAuth, 
+    private firestore: AngularFirestore,
+    ) {
     this.user = firebaseAuth.authState;
   }
 
@@ -34,5 +38,7 @@ export class FirebaseService {
   login(email: string, password: string) {
     // Retornem una promesa, es consumeix en login.form.component
     return this.firebaseAuth.signInWithEmailAndPassword(email, password);
+
   }
+
 }

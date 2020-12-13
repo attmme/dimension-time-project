@@ -7,13 +7,14 @@ import { FirebaseService } from './firebase.service';
 export class AuthService {
 
   constructor(private fbService: FirebaseService) { }
-  isLogged = false;
 
-  public login(e, p) {
-    return this.fbService.login(e, p);
+  public login = (e, p) => this.fbService.login(e, p);
+
+  public setToken(token): void {
+    localStorage.setItem('userId', token);
   }
 
-  public canviarEstat(estat: boolean){
-    this.isLogged = estat;
+  public getToken() {
+    return localStorage.getItem('userId');
   }
 }
