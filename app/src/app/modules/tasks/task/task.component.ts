@@ -45,56 +45,15 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskComponent /* implements OnInit */ {
-  dades = [
-    {
-      nom: 'Pintar',
-      hores: '1',
-    },
-    {
-      nom: 'Posar button',
-      hores: '1.5',
-    },
-    {
-      nom: 'Arreglar material',
-      hores: '2',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-    {
-      nom: 'Borders',
-      hores: '2.5',
-    },
-  ];
-
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  @ViewChild('modalCrear', { static: true }) modalCrear: TemplateRef<any>;
 
+  // variables
   view: CalendarView = CalendarView.Month;
-
   CalendarView = CalendarView;
-
   viewDate: Date = new Date();
+  refresh: Subject<any> = new Subject();
+  activeDayIsOpen: boolean = false;
 
   modalData: {
     action: string;
@@ -119,8 +78,6 @@ export class TaskComponent /* implements OnInit */ {
     },
   ];
 
-  refresh: Subject<any> = new Subject();
-
   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
@@ -136,24 +93,25 @@ export class TaskComponent /* implements OnInit */ {
       draggable: true,
     },
     {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: colors.yellow,
-      actions: this.actions,
-    },
-    {
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
       title: 'A long event that spans 2 months',
       color: colors.blue,
+      actions: this.actions,
       allDay: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
+      },
+      draggable: true,
     },
     {
       start: addHours(startOfDay(new Date()), 2),
       end: addHours(new Date(), 2),
       title: 'A draggable and resizable event',
-      color: colors.yellow,
+      color: colors.blue,
       actions: this.actions,
+      allDay: true,
       resizable: {
         beforeStart: true,
         afterEnd: true,
@@ -162,24 +120,37 @@ export class TaskComponent /* implements OnInit */ {
     },
   ];
 
-  activeDayIsOpen: boolean = true;
+  tasques = [
+    {
+      nom: 'Tasca 1',
+    },
+    {
+      nom: 'Tasca 2',
+    },
+  ];
 
+  // constructor + funcions
   constructor(private modal: NgbModal) {}
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('dayClicked()');
+    console.log('dayClicked(), date: ', date);
+    console.log('dayClicked(), events: ', events);
 
-    if (isSameMonth(date, this.viewDate)) {
+    this.modal.open(this.modalCrear, { size: 'lg' });
+
+    /*     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
         events.length === 0
       ) {
         this.activeDayIsOpen = false;
+        console.log('activeDayIsOpen false');
       } else {
         this.activeDayIsOpen = true;
+        console.log('activeDayIsOpen true');
       }
       this.viewDate = date;
-    }
+    } */
   }
 
   eventTimesChanged({
@@ -201,8 +172,13 @@ export class TaskComponent /* implements OnInit */ {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
+    console.log('handleEvent(): ', action);
+
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+
+    if(action == 'Clicked'){
+      this.modal.open(this.modalContent, { size: 'lg' });
+    }
   }
 
   addEvent(): void {
