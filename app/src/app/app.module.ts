@@ -27,7 +27,7 @@ import { AuthService } from './shared/services/auth.service';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegisterFormComponent } from './modules/register-form/register-form.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { TaskGuard } from './shared/guards/task.guard';
 
 // nou
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -82,7 +82,7 @@ import { FormsModule } from '@angular/forms';
   ],
   exports: [CommonModule, MaterialModule],
 
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

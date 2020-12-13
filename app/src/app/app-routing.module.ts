@@ -3,15 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './modules/home/home.component';
 import { RegisterComponent } from './modules/register/register.component';
 import { TaskComponent } from './modules/tasks/task/task.component';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { TaskGuard } from './shared/guards/task.guard';
+import { HomeGuard } from './shared/guards/home.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'tasks', component: TaskComponent /* , canActivate: [AuthGuard] */  }, // apagat per a debuggear
+  { path: 'home', component: HomeComponent, canActivate: [HomeGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [HomeGuard] },
+  { path: 'tasks', component: TaskComponent, canActivate: [TaskGuard] }, // apagat per a debuggear
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', component: HomeComponent },
+  /* { path: '', redirectTo: 'home', pathMatch: 'full' }, */ // Es pot borrar, no hi ha cap canvi
+  { path: '**', component: HomeComponent, canActivate: [HomeGuard] },
+
 ];
 
 @NgModule({

@@ -7,16 +7,16 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root'
 })
 
-export class AuthGuard implements CanActivate {
+export class TaskGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private router: Router) { }
 
   public canActivate() {
-
     if (this.authService.getToken()) {
       return true;
     } else {
+      this.router.navigate(['/']);
       return false;
     }
   }
