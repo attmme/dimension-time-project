@@ -7,12 +7,12 @@ import { TaskGuard } from './shared/guards/task.guard';
 import { HomeGuard } from './shared/guards/home.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [HomeGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [HomeGuard] },
-  { path: 'tasks', component: TaskComponent, canActivate: [TaskGuard] }, // apagat per a debuggear
+  { path: 'home', component: HomeComponent/* , canActivate: [HomeGuard] */ },
+  { path: 'register', component: RegisterComponent/* , canActivate: [HomeGuard] */ },
+  { path: 'tasks', component: TaskComponent /* , canActivate: [TaskGuard] */ },
 
   /* { path: '', redirectTo: 'home', pathMatch: 'full' }, */ // Es pot borrar, no hi ha cap canvi
-  { path: '**', component: HomeComponent, canActivate: [HomeGuard] },
+  { path: '**', component: HomeComponent/* , canActivate: [HomeGuard] */ },
 
 ];
 
