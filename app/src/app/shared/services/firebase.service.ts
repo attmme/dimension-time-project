@@ -14,14 +14,14 @@ export class FirebaseService {
   user: Observable<firebase.User>;
 
   constructor(
-    private firebaseAuth: AngularFireAuth, 
+    private firebaseAuth: AngularFireAuth,
     private firestore: AngularFirestore,
-    ) {
+  ) {
     this.user = firebaseAuth.authState;
   }
 
   // Registro
-  registrar(user:string, email: string, password: string) {
+  registrar(user: string, email: string, password: string) {
     return this.firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
@@ -38,7 +38,11 @@ export class FirebaseService {
   login(email: string, password: string) {
     // Retornem una promesa, es consumeix en login.form.component
     return this.firebaseAuth.signInWithEmailAndPassword(email, password);
+  }
 
+  // Logout
+  logout() {
+    localStorage.removeItem('userId');
   }
 
 }

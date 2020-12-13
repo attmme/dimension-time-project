@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,13 +11,17 @@ export class HeaderComponent implements OnInit {
   //
   @Input() fill_dada: string;
 
-  constructor(private trucazo_router: Router) {}
+  constructor(
+    private trucazo_router: Router,
+    private service: AuthService
+    ) {}
 
   ngOnInit(): void {}
 
   clickResumen() {}
 
   clickLogout() {
+    this.service.logout();
     this.trucazo_router.navigateByUrl('/login');
   }
 }

@@ -2,7 +2,6 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
-import { userInfo } from 'os';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -51,7 +50,6 @@ export class LoginFormComponent implements OnInit {
       this.service.login(e, p).then(el => {
         this.resposta_server = 0; // resetejem
 
-        console.log("Element: " );
         this.service.setToken(JSON.stringify(el.user.uid))
 
         this.trucazo_router.navigateByUrl('/tasks');

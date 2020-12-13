@@ -8,7 +8,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'tasks', component: TaskComponent/* , canActivate: [AuthGuard] */ }, // apagat per a debuggear
+  { path: 'tasks', component: TaskComponent /* , canActivate: [AuthGuard] */  }, // apagat per a debuggear
 
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', component: HomeComponent },
