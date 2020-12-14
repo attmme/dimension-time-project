@@ -176,6 +176,8 @@ export class TaskComponent implements OnInit {
       console.log('id única de la tasca usuari: ', dades_parseadas[0]);
       console.log('id llistat de tasques: ', dades_parseadas[1]);
 
+      this.date_temporal = event.start;
+
       // dades del evento  ==> donar-li al modal
 
       this.modal.open(this.modalEditar, { size: 'lg' });
@@ -221,8 +223,9 @@ export class TaskComponent implements OnInit {
             },
           ];
         });
+        this.refresh.next();
       });
-  }
+    }
 
   crearTasca() {
     // console.log("crear tasca, tasca: ", this.formulariCrear.value.tasca);
