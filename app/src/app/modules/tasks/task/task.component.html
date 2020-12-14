@@ -1,6 +1,5 @@
 <app-header></app-header>
 
-
 <!-- Barra superior amb els botons de previous, next, etc -->
 <div class="row text-center">
   <div class="col-md-4">
@@ -73,7 +72,6 @@
     [viewDate]="viewDate"
     [events]="events"
     [refresh]="refresh"
-
     (dayClicked)="dayClicked($event.day)"
     (eventClicked)="handleEvent('Clicked', $event.event)"
     (eventTimesChanged)="eventTimesChanged($event)"
@@ -102,97 +100,6 @@
   >
   </mwl-calendar-day-view>
 </div>
-
-<!-- Everything you see below is just for the demo, you don't need to include it in your app -->
-<br /><br /><br />
-
-<!-- Et permet crear un evento -->
-<h3>
-  Edit events
-  <button class="btn btn-primary float-right" (click)="addEvent()">
-    Add new
-  </button>
-  <div class="clearfix"></div>
-</h3>
-
-
-<div class="table-responsive">
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Primary color</th>
-        <th>Secondary color</th>
-        <th>Starts at</th>
-        <th>Ends at</th>
-        <th>Remove</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let event of events">
-        <td>
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="event.title"
-            (keyup)="refresh.next()"
-          />
-        </td>
-        <td>
-          <input
-            type="color"
-            [(ngModel)]="event.color.primary"
-            (change)="refresh.next()"
-          />
-        </td>
-        <td>
-          <input
-            type="color"
-            [(ngModel)]="event.color.secondary"
-            (change)="refresh.next()"
-          />
-        </td>
-        <td>
-          <input
-            class="form-control"
-            type="text"
-            mwlFlatpickr
-            [(ngModel)]="event.start"
-            (ngModelChange)="refresh.next()"
-            [altInput]="true"
-            [convertModelValue]="true"
-            [enableTime]="true"
-            dateFormat="Y-m-dTH:i"
-            altFormat="F j, Y H:i"
-            placeholder="Not set"
-          />
-        </td>
-        <td>
-          <input
-            class="form-control"
-            type="text"
-            mwlFlatpickr
-            [(ngModel)]="event.end"
-            (ngModelChange)="refresh.next()"
-            [altInput]="true"
-            [convertModelValue]="true"
-            [enableTime]="true"
-            dateFormat="Y-m-dTH:i"
-            altFormat="F j, Y H:i"
-            placeholder="Not set"
-          />
-        </td>
-        <td>
-          <button class="btn btn-danger" (click)="deleteEvent(event)">
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
 
 <!-- El modal que se't obre -->
 <ng-template #modalContent let-close="close">
@@ -224,10 +131,11 @@
   </div>
 </ng-template>
 
-
-
 <!-- El modal per a crear una tasca -->
-<ng-template #modalCrear let-close="close">
+<ng-template #modalCrear let-close="close" >
+
+  <form  [formGroup] ="formulariCrear" (ngSubmit)="crearTasca()">
+
   <!--  -->
   <div class="modal-header">
     <h5 class="modal-title">Create a new task</h5>
@@ -236,59 +144,74 @@
     </button>
   </div>
 
-  <!--  -->
+  <!-- inputs crear tasca  -->
   <div class="modal-body">
     <div>
       Task:
-      <pre>desplegable</pre>
+      <select name="tasca" formControlName="tasca">
+        <option *ngFor="let tasca of tasques" value="{{tasca.id}}">{{tasca.nom}}</option>
+      </select>
     </div>
+
+    <div>
+      Primary color:
+      <input type="color" (change)="refresh.next()" formControlName="colorPrimari"/>
+    </div>
+
+    <div>
+      Secondary color:
+      <input type="color" (change)="refresh.next()" formControlName="colorSecundari" />
+    </div>
+
     <div>
       Start date:
 
       <input
-      class="form-control"
-      type="text"
-      mwlFlatpickr
-
-      (ngModelChange)="refresh.next()"
-      [altInput]="true"
-      [convertModelValue]="true"
-      [enableTime]="true"
-      dateFormat="Y-m-dTH:i"
-      altFormat="F j, Y H:i"
-      placeholder="Not set"
-    />
-
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        (ngModelChange)="refresh.next()"
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+        formControlName="dataInici"
+      />
     </div>
     <div>
       End date:
       <input
-      class="form-control"
-      type="text"
-      mwlFlatpickr
-
-      (ngModelChange)="refresh.next()"
-      [altInput]="true"
-      [convertModelValue]="true"
-      [enableTime]="true"
-      dateFormat="Y-m-dTH:i"
-      altFormat="F j, Y H:i"
-      placeholder="Not set"
-    />
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        (ngModelChange)="refresh.next()"
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="Y-m-dTH:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+        formControlName="dataFinal"
+      />
     </div>
   </div>
 
   <!--  -->
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="close()">
+    <button
+      class="btn btn-primary"
+      type="submit"
+      (click)="close()"
+    >
       Create
     </button>
 
     <button type="button" class="btn btn-outline-secondary" (click)="close()">
       Cancel
     </button>
-
   </div>
+  </form>
+
 </ng-template>
-
-
