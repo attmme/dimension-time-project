@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/shared/services/auth.service';
 import {
   Component,
   ChangeDetectionStrategy,
@@ -70,6 +71,7 @@ export class TaskComponent implements OnInit {
   formulariEditar: FormGroup;
   dada_tmp: string | number;
   dada_tasca_escollida_temporal: string | number;
+  dada_tasca_temps_unix: any; // temporal
 
   form: FormGroup = new FormGroup({
     tasca: new FormControl(''),
@@ -104,9 +106,9 @@ export class TaskComponent implements OnInit {
   ];
 
   events: CalendarEvent[] = [
-    {
+/*     {
       id: 0,
-      cssClass: '0;1', // id usuari; id tasca
+      cssClass: '0;1', // id usuari; id llistat tasques
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
       title: 'A 3 day event',
@@ -118,8 +120,8 @@ export class TaskComponent implements OnInit {
         afterEnd: true,
       },
       draggable: true,
-    },
-    {
+    }, */
+/*     {
       id: 1,
       cssClass: '0;0', // id usuari; id tasca
       start: subDays(endOfMonth(new Date()), 3),
@@ -133,8 +135,8 @@ export class TaskComponent implements OnInit {
         afterEnd: true,
       },
       draggable: true,
-    },
-    {
+    }, */
+/*     {
       id: 2,
       cssClass: '0;0', // id usuari; id tasca
       start: addHours(startOfDay(new Date()), 2),
@@ -148,9 +150,8 @@ export class TaskComponent implements OnInit {
         afterEnd: true,
       },
       draggable: true,
-    },
-
-    {
+    }, */
+/*     {
       id: 3,
       cssClass: '0;2', // id usuari; id tasca
       start: subDays(startOfWeek(new Date()), 1),
@@ -163,7 +164,7 @@ export class TaskComponent implements OnInit {
         afterEnd: true,
       },
       draggable: true,
-    },
+    }, */
   ];
 
   tasques = [];
@@ -172,7 +173,8 @@ export class TaskComponent implements OnInit {
   constructor(
     private modal: NgbModal,
     public formBuilder: FormBuilder,
-    private fbService: FirebaseService
+    private fbService: FirebaseService,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -181,6 +183,19 @@ export class TaskComponent implements OnInit {
         this.tasques.push({ id: id, nom: el['nom'] });
       });
     });
+
+
+    this.guardarTasques();
+    //this.fbService.readColl(`users/${this.auth.getToken()}/tasks`).then((data) => {
+    /* this.fbService
+      .readColl(`users/LjovCXj05kOtSU1ok24lV0njpjm1/tasks`)
+      .then((data) => {
+        data.map((el, id) => {
+          console.log('tasca1: ', el['date_final'].seconds);
+          this.dada_tasca_temps_unix = el['date_final'].seconds * 1000;
+          // anar pintant tasca per tasca en el calendari
+        });
+      }); */
 
     this.formulariCrear = this.formBuilder.group({
       tasca: ['', [Validators.required]],
@@ -288,6 +303,42 @@ export class TaskComponent implements OnInit {
 
   editarTasca() {}
 
+  guardarTasques() {
+    /*
+    this.fbService.readColl(`users/LjovCXj05kOtSU1ok24lV0njpjm1/tasks`).then((data) => {
+      data.map((el, id) => {
+        console.log('tasca1: ', el['date_final'].seconds );
+        this.dada_tasca_temps_unix = (el['date_final'].seconds*1000);
+        // anar pintant tasca per tasca en el calendari
+      });
+    });
+     */
+    /*     let _color = this.colors[this.formulariCrear.value.colorPrimari];
+
+    let paquet_de_dades = `${0};${this.formulariCrear.value.tasca}`;
+
+    this.events = [
+      ...this.events,
+      {
+        id: this.events.length, // nova id = tamany array ( final array )
+        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
+        start: this.formulariCrear.value.dataInici,
+        end: this.formulariCrear.value.dataFinal,
+        title: this.donarTasca(this.formulariCrear.value.tasca),
+        color: _color,
+        actions: this.actions,
+        allDay: false,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+      },
+    ];
+ */
+    // console.log("eventos després: ", this.events);
+  }
+
   crearTasca() {
     // console.log("crear tasca, tasca: ", this.formulariCrear.value.tasca);
     // console.log("crear tasca color primari: ", this.formulariCrear.value.dataFinal);
@@ -321,5 +372,50 @@ export class TaskComponent implements OnInit {
   donarTasca(id): string {
     let nom_tasca = this.tasques.find((element) => element.id == id);
     return nom_tasca.nom;
+  }
+
+  crearDBTest()
+  {
+    let usuari = this.auth.getToken();
+
+    let tasques_usuari = [
+      {
+        id: 0,
+        data_inici: subDays(startOfDay(new Date()), 1),
+        data_final: addDays(new Date(), 1),
+        color: this.colors.red,
+        titol: 'A 3 day event',
+        id_llistat_tasques: 1,
+      },
+      {
+        id: 1,
+        data_inici: subDays(endOfMonth(new Date()), 3),
+        data_final: addDays(endOfMonth(new Date()), 3),
+        color: this.colors.blue,
+        titol: 'A long event that spans 2 months',
+        id_llistat_tasques: 2,
+      },
+      {
+        id: 2,
+        data_inici: addHours(startOfDay(new Date()), 2),
+        data_final: addHours(new Date(), 2),
+        color: this.colors.blue,
+        titol: 'A draggable and resizable event',
+        id_llistat_tasques: 0,
+      },
+      {
+        id: 3,
+        data_inici: subDays(startOfWeek(new Date()), 1),
+        data_final: addDays(startOfWeek(new Date()), 1),
+        color: this.colors.yellow,
+        titol: 'A long event that spans 2 months',
+        id_llistat_tasques: 0,
+      },
+    ];
+
+    for (let i = 0; i < tasques_usuari.length; i++) {
+      this.fbService.crearEstructuraColeccio('users/' + usuari + '/tasks', tasques_usuari[i]);
+    }
+
   }
 }

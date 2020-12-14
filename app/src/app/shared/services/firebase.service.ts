@@ -31,18 +31,33 @@ export class FirebaseService {
   }
 
   // Guardar time-task
-  timeTask(dades: object) {
-    let collection = this.firestore.collection('timeTasks');
+  crearEstructuraColeccio(ruta: string, dades: any) {
+    let collection = this.firestore.collection(ruta);
+
 
     // Agafar l'objecte i canviar aquí el contingut
-    collection.doc('test').set({
-      prova: 'prova',
+
+    collection.doc( dades.id.toString()  ).set({
+      id: dades.id,
+      id_llistat_tasques: dades.id_llistat_tasques,
+      data_inici: dades.data_inici,
+      data_final: dades.data_final,
+      color: dades.color,
+      titol: dades.titol,
     });
   }
 
   // Llegir coleccio
   readColl(name) {
     let collection = this.firestore.collection(name);
+    return collection
+      .get()
+      .toPromise()
+      .then((data) => data.docs.map((el) => el.data()));
+  }
+
+  llegir_tasques_usuari(id_usuari) {
+    let collection = this.firestore.collection(`users/${id_usuari}/tasks`);
     return collection
       .get()
       .toPromise()

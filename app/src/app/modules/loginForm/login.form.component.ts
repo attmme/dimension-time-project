@@ -49,9 +49,7 @@ export class LoginFormComponent implements OnInit {
 
       this.service.login(e, p).then(el => {
         this.resposta_server = 0; // resetejem
-
-        this.service.setToken(JSON.stringify(el.user.uid))
-
+        this.service.setToken(el.user.uid);
         // Redirigeix si està login
         if (true){}
         this.trucazo_router.navigateByUrl('/tasks');
