@@ -35,6 +35,9 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { FormsModule } from '@angular/forms';
 // nou
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS} from 'ng-pick-datetime';
+
+
 //
 
 @NgModule({
@@ -52,6 +55,9 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-mat
     RegisterFormComponent,
   ],
   imports: [
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
+
     CommonModule,
     BrowserModule,
     AppRoutingModule,

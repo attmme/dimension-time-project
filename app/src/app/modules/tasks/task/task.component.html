@@ -4,29 +4,15 @@
 <div class="row text-center">
   <div class="col-md-4">
     <div class="btn-group">
-      <div
-        class="btn btn-primary"
-        mwlCalendarPreviousView
-        [view]="view"
-        [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
-      >
+      <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()">
         Previous
       </div>
-      <div
-        class="btn btn-outline-secondary"
-        mwlCalendarToday
-        [(viewDate)]="viewDate"
-      >
+      <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
         Today
       </div>
-      <div
-        class="btn btn-primary"
-        mwlCalendarNextView
-        [view]="view"
-        [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
-      >
+      <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()">
         Next
       </div>
     </div>
@@ -36,25 +22,13 @@
   </div>
   <div class="col-md-4">
     <div class="btn-group">
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Month)"
-        [class.active]="view === CalendarView.Month"
-      >
+      <div class="btn btn-primary" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
         Month
       </div>
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Week)"
-        [class.active]="view === CalendarView.Week"
-      >
+      <div class="btn btn-primary" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
         Week
       </div>
-      <div
-        class="btn btn-primary"
-        (click)="setView(CalendarView.Day)"
-        [class.active]="view === CalendarView.Day"
-      >
+      <div class="btn btn-primary" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
         Day
       </div>
     </div>
@@ -67,37 +41,19 @@
 <div [ngSwitch]="view">
   <!-- calendari, vista mensual -->
   <!-- [activeDayIsOpen]="activeDayIsOpen" ,linia 75 -->
-  <mwl-calendar-month-view
-    *ngSwitchCase="CalendarView.Month"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
+  <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+    [refresh]="refresh" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-month-view>
 
   <!-- calendari, vista setmanal -->
-  <mwl-calendar-week-view
-    *ngSwitchCase="CalendarView.Week"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
+  <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-week-view>
 
   <!-- calendari, vista diaria -->
-  <mwl-calendar-day-view
-    *ngSwitchCase="CalendarView.Day"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
+  <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-day-view>
 </div>
 
@@ -126,31 +82,22 @@
       <div>
         Color:
         <select name="colorPrimari" formControlName="colorPrimari">
-          <option
-            *ngFor="let color of colors | keyvalue"
-            value="{{ color.key }}"
-          >
+          <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
             {{ color.key }}
           </option>
         </select>
       </div>
 
       <div>
-  <!--  -->
+        <!--  -->
         Start date:
-        <input matInput [matDatepicker]="picker"
+        <input matInput [matDatepicker]="picker" class="form-control" type="date" (ngModelChange)="refresh.next()"
+          formControlName="dataInici" value="{{ variable_date_inicial }}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <!--  -->
 
-        class="form-control"
-        type="date"
-        (ngModelChange)="refresh.next()"
-        formControlName="dataInici"
-        value="{{ variable_date_inicial }}"
-        >
-<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-<mat-datepicker #picker></mat-datepicker>
-<!--  -->
-
-<!--         <input
+        <!--         <input
           class="form-control"
           type="text"
           mwlFlatpickr
@@ -168,20 +115,9 @@
 
       <div>
         End date:
-        <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="dTH-m-Y:i"
-          altFormat="F j, Y H:i"
-          placeholder="Not set"
-          formControlName="dataFinal"
-          value="{{ variable_date_final }}"
-        />
+        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
+          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
+          placeholder="Not set" formControlName="dataFinal" value="{{ variable_date_final }}" />
       </div>
     </div>
 
@@ -220,52 +156,31 @@
         </select>
       </div>
 
+      <input [owlDateTime]="dt" [owlDateTimeTrigger]="dt">
+      <owl-date-time #dt></owl-date-time>
+
       <div>
         Color:
         <select name="colorPrimari" formControlName="colorPrimari">
-          <option
-            *ngFor="let color of colors | keyvalue"
-            value="{{ color.key }}"
-          >
+          <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
             {{ color.key }}
           </option>
         </select>
       </div>
 
-      <div>
+<!--       <div>
         Start date:
-        <input
-        class="form-control"
-        type="text"
-        mwlFlatpickr
-        (ngModelChange)="refresh.next()"
-        [altInput]="true"
-        [convertModelValue]="true"
-        [enableTime]="true"
-        dateFormat="dTH-m-Y:i"
-        altFormat="F j, Y H:i"
-        placeholder="Not set"
-        formControlName="dataInici"
-        value="{{ date_inicial_modal_crear  }}"
-      />
+        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
+          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
+          placeholder="Not set" formControlName="dataInici" value="{{ date_inicial_modal_crear  }}" />
       </div>
 
       <div>
         End date:
-        <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="dTH-m-Y:i"
-          altFormat="F j, Y H:i"
-          placeholder="Not set"
-          formControlName="dataFinal"
-        />
-      </div>
+        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
+          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
+          placeholder="Not set" formControlName="dataFinal" />
+      </div> -->
     </div>
 
     <!-- Botons -->

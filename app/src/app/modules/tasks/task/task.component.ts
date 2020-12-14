@@ -323,10 +323,10 @@ export class TaskComponent implements OnInit {
     ];
 
     for (let i = 0; i < tasques_usuari.length; i++) {
-      this.fbService.crearEstructuraColeccio(
+/*       this.fbService.crearEstructuraColeccio(
         'users/' + usuari + '/tasks',
         tasques_usuari[i]
-      );
+      ); */
     }
   }
 }

@@ -10,10 +10,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [HomeGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [HomeGuard] },
   { path: 'tasks', component: TaskComponent, canActivate: [TaskGuard] },
-
-  /* { path: '', redirectTo: 'home', pathMatch: 'full' }, */ // Es pot borrar, no hi ha cap canvi
   { path: '**', component: HomeComponent, canActivate: [HomeGuard] },
-
+  /* { path: '', redirectTo: 'home', pathMatch: 'full' }, */ // Es pot borrar, no hi ha cap canvi
 ];
 
 @NgModule({
