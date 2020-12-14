@@ -1,14 +1,23 @@
 <mat-toolbar color="primary">
-  <div>
+  <div *ngIf=!isLogged()>
+    <span>Register</span>
+  </div>
+
+  <div *ngIf=isLogged()>
     <span>Tasks</span>
   </div>
 
   <div id="botons_laterals">
-    <button mat-raised-button (click)="(clickResumen())" color="primary">
+    <button *ngIf=isLogged() mat-raised-button (click)="(clickResumen())" color="primary">
       Resumen {{fill_dada}}
     </button>
-    <button mat-raised-button (click)="(clickLogout())" color="primary">
+
+    <button *ngIf=isLogged() mat-raised-button (click)="(clickLogout())" color="primary">
       Logout
+    </button>
+
+    <button *ngIf=!isLogged() mat-raised-button (click)="(clickLogin())" color="primary">
+      Login
     </button>
   </div>
 </mat-toolbar>

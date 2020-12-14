@@ -14,14 +14,22 @@ export class HeaderComponent implements OnInit {
   constructor(
     private trucazo_router: Router,
     private service: AuthService
-    ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  clickResumen() {}
+  isLogged = () => localStorage.getItem('userId');
+
+  clickResumen() { }
 
   clickLogout() {
     this.service.logout();
     this.trucazo_router.navigateByUrl('/login');
   }
+
+  clickLogin() {
+    this.service.logout();
+    this.trucazo_router.navigateByUrl('/login');
+  }
+
 }

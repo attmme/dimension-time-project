@@ -10,7 +10,9 @@ export class AuthService {
 
   public login = (e, p) => this.fbService.login(e, p);
 
-  public logout = () => this.fbService.logout();
+  public logout = () => {
+    this.fbService.logout()
+  };
 
   public setToken(token): void {
     localStorage.setItem('userId', token);
