@@ -15,19 +15,38 @@ export class FirebaseService {
 
   constructor(
     private firebaseAuth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private firestore: AngularFirestore
   ) {
     this.user = firebaseAuth.authState;
   }
 
   // Guardar time-task
-  task(dades: object){
-    let collection = this.firestore.collection("tasks");
+  task(dades: object) {
+    let collection = this.firestore.collection('tasks');
 
     // Agafar l'objecte i canviar aquí el contingut
-    collection.doc("test").set({
-      prova: "prova"
-    })
+    collection.doc('test').set({
+      prova: 'prova',
+    });
+  }
+
+  // Guardar time-task
+  timeTask(dades: object) {
+    let collection = this.firestore.collection('timeTasks');
+
+    // Agafar l'objecte i canviar aquí el contingut
+    collection.doc('test').set({
+      prova: 'prova',
+    });
+  }
+
+  // Llegir coleccio
+  readColl(name) {
+    let collection = this.firestore.collection(name);
+    return collection
+      .get()
+      .toPromise()
+      .then((data) => data.docs.map((el) => el.data()));
   }
 
   // Registro
@@ -36,11 +55,11 @@ export class FirebaseService {
       .createUserWithEmailAndPassword(email, password)
       .then((value) => {
         // S'afegeix a la colecció users (bdd) un nou document (taula) amb la id de l'usuari registrat
-        let collection = this.firestore.collection("users");
+        let collection = this.firestore.collection('users');
         collection.doc(value.user.uid).set({
           email: email,
           user: user,
-        })
+        });
       });
   }
 
@@ -54,5 +73,4 @@ export class FirebaseService {
   logout() {
     localStorage.removeItem('userId');
   }
-
 }

@@ -101,117 +101,171 @@
   </mwl-calendar-day-view>
 </div>
 
-<!-- El modal que se't obre -->
-<ng-template #modalContent let-close="close">
-  <!--  -->
-  <div class="modal-header">
-    <h5 class="modal-title">Event action occurred</h5>
-    <button type="button" class="close" (click)="close()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
-  <!--  -->
-  <div class="modal-body">
-    <div>
-      Action:
-      <pre>{{ modalData?.action }}</pre>
+<!-- El modal per a editar una tasca -->
+<ng-template #modalEditar let-close="close">
+  <form [formGroup]="formulariEditar" (ngSubmit)="editarTasca()">
+    <!-- Títol -->
+    <div class="modal-header">
+      <h5 class="modal-title">Edit task</h5>
+      <h3 class="modal-title">test: {{ dada_tmp }}</h3>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-    <div>
-      Event:
-      <pre>{{ modalData?.event | json }}</pre>
-    </div>
-  </div>
 
-  <!--  -->
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">
-      OK
-    </button>
-  </div>
+    <!-- inputs editar tasca  -->
+    <div class="modal-body">
+      <div>
+        Task:
+        <select name="tasca" formControlName="tasca">
+          <option
+            *ngFor="let tasca of tasques"
+            value="{{ tasca.id }}"
+          >
+            {{ tasca.nom }}
+          </option>
+        </select>
+      </div>
+
+
+      <div>
+        Color:
+        <select name="colorPrimari" formControlName="colorPrimari">
+          <option
+            *ngFor="let color of colors | keyvalue"
+            value="{{ color.key }}"
+          >
+            {{ color.key }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        Start date:
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          (ngModelChange)="refresh.next()"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+          formControlName="dataInici"
+        />
+      </div>
+
+      <div>
+        End date:
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          (ngModelChange)="refresh.next()"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+          formControlName="dataFinal"
+        />
+      </div>
+    </div>
+
+    <!-- Botons -->
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="submit" (click)="close()">
+        Save
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        Cancel
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <!-- El modal per a crear una tasca -->
-<ng-template #modalCrear let-close="close" >
-
-  <form  [formGroup] ="formulariCrear" (ngSubmit)="crearTasca()">
-
-  <!--  -->
-  <div class="modal-header">
-    <h5 class="modal-title">Create a new task</h5>
-    <button type="button" class="close" (click)="close()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
-  <!-- inputs crear tasca  -->
-  <div class="modal-body">
-    <div>
-      Task:
-      <select name="tasca" formControlName="tasca">
-        <option *ngFor="let tasca of tasques" value="{{tasca.id}}">{{tasca.nom}}</option>
-      </select>
+<ng-template #modalCrear let-close="close">
+  <form [formGroup]="formulariCrear" (ngSubmit)="crearTasca()">
+    <!-- Títol -->
+    <div class="modal-header">
+      <h5 class="modal-title">Create a new task</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
 
-    <div>
-      Primary color:
-      <input type="color" (change)="refresh.next()" formControlName="colorPrimari"/>
+    <!-- inputs crear tasca  -->
+    <div class="modal-body">
+      <div>
+        Task:
+        <select name="tasca" formControlName="tasca">
+          <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
+            {{ tasca.nom }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        Color:
+        <select name="colorPrimari" formControlName="colorPrimari">
+          <option
+            *ngFor="let color of colors | keyvalue"
+            value="{{ color.key }}"
+          >
+            {{ color.key }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        Start date:
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          (ngModelChange)="refresh.next()"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+          formControlName="dataInici"
+        />
+      </div>
+
+      <div>
+        End date:
+        <input
+          class="form-control"
+          type="text"
+          mwlFlatpickr
+          (ngModelChange)="refresh.next()"
+          [altInput]="true"
+          [convertModelValue]="true"
+          [enableTime]="true"
+          dateFormat="Y-m-dTH:i"
+          altFormat="F j, Y H:i"
+          placeholder="Not set"
+          formControlName="dataFinal"
+        />
+      </div>
     </div>
 
-    <div>
-      Secondary color:
-      <input type="color" (change)="refresh.next()" formControlName="colorSecundari" />
+    <!-- Botons -->
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="submit" (click)="close()">
+        Create
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        Cancel
+      </button>
     </div>
-
-    <div>
-      Start date:
-
-      <input
-        class="form-control"
-        type="text"
-        mwlFlatpickr
-        (ngModelChange)="refresh.next()"
-        [altInput]="true"
-        [convertModelValue]="true"
-        [enableTime]="true"
-        dateFormat="Y-m-dTH:i"
-        altFormat="F j, Y H:i"
-        placeholder="Not set"
-        formControlName="dataInici"
-      />
-    </div>
-    <div>
-      End date:
-      <input
-        class="form-control"
-        type="text"
-        mwlFlatpickr
-        (ngModelChange)="refresh.next()"
-        [altInput]="true"
-        [convertModelValue]="true"
-        [enableTime]="true"
-        dateFormat="Y-m-dTH:i"
-        altFormat="F j, Y H:i"
-        placeholder="Not set"
-        formControlName="dataFinal"
-      />
-    </div>
-  </div>
-
-  <!--  -->
-  <div class="modal-footer">
-    <button
-      class="btn btn-primary"
-      type="submit"
-      (click)="close()"
-    >
-      Create
-    </button>
-
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">
-      Cancel
-    </button>
-  </div>
   </form>
-
 </ng-template>

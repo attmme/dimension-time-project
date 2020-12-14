@@ -4,6 +4,7 @@ import {
   ViewChild,
   TemplateRef,
   OnInit,
+  Input,
 } from '@angular/core';
 import {
   startOfDay,
@@ -24,22 +25,14 @@ import {
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
-const colors: any = {
-  red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3',
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF',
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA',
-  },
-};
+import { FirebaseService } from '../../../shared/services/firebase.service';
 
 @Component({
   selector: 'app-task',
@@ -48,8 +41,24 @@ const colors: any = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskComponent implements OnInit {
+  colors: any = {
+    red: {
+      primary: '#ad2121',
+      secondary: '#FAE3E3',
+    },
+    blue: {
+      primary: '#1e90ff',
+      secondary: '#D1E8FF',
+    },
+    yellow: {
+      primary: '#e3bc08',
+      secondary: '#FDF1BA',
+    },
+  };
+
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   @ViewChild('modalCrear', { static: true }) modalCrear: TemplateRef<any>;
+  @ViewChild('modalEditar', { static: true }) modalEditar: TemplateRef<any>;
 
   // variables
   view: CalendarView = CalendarView.Month;
@@ -57,10 +66,10 @@ export class TaskComponent implements OnInit {
   viewDate: Date = new Date();
   refresh: Subject<any> = new Subject();
   activeDayIsOpen: boolean = false;
-
-
-  // temporal
   formulariCrear: FormGroup;
+  formulariEditar: FormGroup;
+  dada_tmp: string | number;
+  dada_tasca_escollida_temporal: string | number;
 
   form: FormGroup = new FormGroup({
     tasca: new FormControl(''),
@@ -70,7 +79,6 @@ export class TaskComponent implements OnInit {
     dataFinal: new FormControl(''),
   });
   // temporal
-
 
   modalData: {
     action: string;
@@ -98,11 +106,11 @@ export class TaskComponent implements OnInit {
   events: CalendarEvent[] = [
     {
       id: 0,
-      cssClass: "0", // id usuari
+      cssClass: '0;1', // id usuari; id tasca
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
       title: 'A 3 day event',
-      color: colors.red,
+      color: this.colors.red,
       actions: this.actions,
       allDay: false,
       resizable: {
@@ -113,11 +121,11 @@ export class TaskComponent implements OnInit {
     },
     {
       id: 1,
-      cssClass: "0", // id usuari
+      cssClass: '0;0', // id usuari; id tasca
       start: subDays(endOfMonth(new Date()), 3),
       end: addDays(endOfMonth(new Date()), 3),
       title: 'A long event that spans 2 months',
-      color: colors.blue,
+      color: this.colors.blue,
       actions: this.actions,
       allDay: false,
       resizable: {
@@ -128,11 +136,11 @@ export class TaskComponent implements OnInit {
     },
     {
       id: 2,
-      cssClass: "0", // id usuari
+      cssClass: '0;0', // id usuari; id tasca
       start: addHours(startOfDay(new Date()), 2),
       end: addHours(new Date(), 2),
       title: 'A draggable and resizable event',
-      color: colors.blue,
+      color: this.colors.blue,
       actions: this.actions,
       allDay: false,
       resizable: {
@@ -144,11 +152,11 @@ export class TaskComponent implements OnInit {
 
     {
       id: 3,
-      cssClass: "0", // id usuari
+      cssClass: '0;2', // id usuari; id tasca
       start: subDays(startOfWeek(new Date()), 1),
       end: addDays(startOfWeek(new Date()), 1),
       title: 'A long event that spans 2 months',
-      color: colors.yellow,
+      color: this.colors.yellow,
       allDay: false,
       resizable: {
         beforeStart: true,
@@ -158,39 +166,40 @@ export class TaskComponent implements OnInit {
     },
   ];
 
-  tasques = [
-    {
-      nom: 'Tasca 1',
-      id: 1,
-    },
-    {
-      nom: 'Tasca 2',
-      id: 2,
-    },
-  ];
+  tasques = [];
 
   // constructor + funcions
-  constructor(private modal: NgbModal,
-    public formBuilder: FormBuilder) {}
+  constructor(
+    private modal: NgbModal,
+    public formBuilder: FormBuilder,
+    private fbService: FirebaseService
+  ) {}
 
+  ngOnInit(): void {
+    this.fbService.readColl('tasks').then((data) => {
+      data.map((el, id) => {
+        this.tasques.push({ id: id, nom: el['nom'] });
+      });
+    });
 
-    ngOnInit(): void
-    {
-    this.formulariCrear = this.formBuilder.group(
-      {
-       tasca: ['', [Validators.required]],
+    this.formulariCrear = this.formBuilder.group({
+      tasca: ['', [Validators.required]],
       colorPrimari: ['', [Validators.required]],
       colorSecundari: ['', [Validators.required]],
       dataInici: ['', [Validators.required]],
       dataFinal: ['', [Validators.required]],
-    }
-    );
+    });
+
+    this.formulariEditar = this.formBuilder.group({
+      tasca: ['', [Validators.required]],
+      colorPrimari: ['', [Validators.required]],
+      colorSecundari: ['', [Validators.required]],
+      dataInici: ['', [Validators.required]],
+      dataFinal: ['', [Validators.required]],
+    });
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('dayClicked(), date: ', date);
-    console.log('dayClicked(), events: ', events);
-
     this.modal.open(this.modalCrear, { size: 'lg' });
 
     /*     if (isSameMonth(date, this.viewDate)) {
@@ -231,12 +240,24 @@ export class TaskComponent implements OnInit {
 
     this.modalData = { event, action };
 
-    if(action == 'Clicked'){
-      this.modal.open(this.modalContent, { size: 'lg' });
+    if (action == 'Clicked') {
+      let dades_parseadas = event.cssClass.split(';');
+
+      console.log('evento: ', event);
+      console.log('id evento: ', event.id);
+      console.log('cssClass evento: ', event.cssClass);
+      console.log('id usuari: ', dades_parseadas[0]);
+      console.log('id tasca seleccionada: ', dades_parseadas[1]);
+
+      this.dada_tmp = dades_parseadas[1];
+
+      // dades del evento  ==> donar-li al modal
+
+      this.modal.open(this.modalEditar, { size: 'lg' });
     }
   }
 
-/*   addEvent(): void {
+  /*   addEvent(): void {
     this.events = [
       ...this.events,
       {
@@ -265,31 +286,40 @@ export class TaskComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  crearTasca()
-  {
-    // console.log("crear tasca color primari: ", this.formulariCrear.value.colorPrimari);
+  editarTasca() {}
+
+  crearTasca() {
+    // console.log("crear tasca, tasca: ", this.formulariCrear.value.tasca);
     // console.log("crear tasca color primari: ", this.formulariCrear.value.dataFinal);
 
-    console.log( this.donarTasca(this.formulariCrear.value.tasca) );
+    let _color = this.colors[this.formulariCrear.value.colorPrimari];
 
-    /* this.events = [
+    let paquet_de_dades = `${0};${this.formulariCrear.value.tasca}`;
+
+    this.events = [
       ...this.events,
       {
-        title: this.formulariCrear.value.tasca,
+        id: this.events.length, // nova id = tamany array ( final array )
+        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
         start: this.formulariCrear.value.dataInici,
         end: this.formulariCrear.value.dataFinal,
-        color: this.formulariCrear.value.colorPrimari, // canviar
+        title: this.donarTasca(this.formulariCrear.value.tasca),
+        color: _color,
+        actions: this.actions,
+        allDay: false,
         draggable: true,
         resizable: {
           beforeStart: true,
           afterEnd: true,
         },
       },
-    ]; */
+    ];
+
+    // console.log("eventos després: ", this.events);
   }
 
-  donarTasca(id): String{
-    let nom_tasca = this.tasques.find((element)=> element.id == id);
+  donarTasca(id): string {
+    let nom_tasca = this.tasques.find((element) => element.id == id);
     return nom_tasca.nom;
   }
 }
