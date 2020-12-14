@@ -69,7 +69,10 @@ export class TaskComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
-  date_temporal: Date = new Date();
+  //a millorar
+  date_inicial_modal_crear: Date;
+  variable_date_inicial: Date = new Date();
+  variable_date_final: Date = new Date();
 
   events: CalendarEvent[] = [];
   tasques = [];
@@ -141,6 +144,7 @@ export class TaskComponent implements OnInit {
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.date_inicial_modal_crear = date;
     this.modal.open(this.modalCrear, { size: 'lg' });
   }
 
@@ -176,11 +180,24 @@ export class TaskComponent implements OnInit {
       console.log('id única de la tasca usuari: ', dades_parseadas[0]);
       console.log('id llistat de tasques: ', dades_parseadas[1]);
 
-      this.date_temporal = event.start;
-
       // dades del evento  ==> donar-li al modal
+      // console.log('ABANS: ' + this.formulariEditar.controls['dataInici']);
+      // this.formulariEditar.controls['dataInici'].setValue(event.start);
+      // console.log('DESPRES: ' + this.formulariEditar.controls['dataInici']);
 
-      this.modal.open(this.modalEditar, { size: 'lg' });
+      console.log("start: ", event.start.toString() );
+      console.log("start: ", event.start.toTimeString() );
+      console.log("start: ", event.start.toISOString() );
+      console.log("start: ", event.start.toLocaleDateString() );
+      console.log("start: ", event.start.toUTCString() );
+      console.log("start: ", event.start.toLocaleTimeString() );
+      this.variable_date_inicial = event.start;
+      this.variable_date_final = event.end;
+
+      // this.formulariEditar.controls['dataFinal'].setValue(event.end);
+      // console.log("asd: ", this.formulariEditar.controls.dataInici.value );
+      const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
+      //puntero.componentInstance.dataFinal = event.end;
     }
   }
 
@@ -196,7 +213,9 @@ export class TaskComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  editarTasca() {}
+  editarTasca() {
+    console.log('editar tasca');
+  }
 
   // de la DB => web
   agafarTasquesDB() {
@@ -225,11 +244,10 @@ export class TaskComponent implements OnInit {
         });
         this.refresh.next();
       });
-    }
+  }
 
   crearTasca() {
-    // console.log("crear tasca, tasca: ", this.formulariCrear.value.tasca);
-    // console.log("crear tasca color primari: ", this.formulariCrear.value.dataFinal);
+    console.log("crear tasca: ", this.formulariCrear.value);
 
     let _color = this.colors[this.formulariCrear.value.colorPrimari];
 
@@ -254,11 +272,11 @@ export class TaskComponent implements OnInit {
       },
     ];
 
-    let usuari = this.auth.getToken();
-    this.fbService.crearEstructuraColeccio(
-      'users/' + usuari + '/tasks',
-      this.events[this.events.length - 1]
-    );
+    // let usuari = this.auth.getToken();
+    // this.fbService.crearEstructuraColeccio(
+    //   'users/' + usuari + '/tasks',
+    //   this.events[this.events.length - 1]
+    // );
   }
 
   donarTasca(id): string {
@@ -312,3 +330,17 @@ export class TaskComponent implements OnInit {
     }
   }
 }
+
+// openDialog(item) {
+//   const dialogConfig = new MatDialogConfig();
+
+//   this.formGroup.setValue(item);
+//   // dialogConfig.disableClose = true;
+//   dialogConfig.autoFocus = true;
+
+//   dialogConfig.data = this.formGroup;
+
+//   const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+
+//   dialogRef.afterClosed().subscribe((data) => console.log(data));
+// }

@@ -70,7 +70,7 @@
   <mwl-calendar-month-view
     *ngSwitchCase="CalendarView.Month"
     [viewDate]="viewDate"
-    [events]="events "
+    [events]="events"
     [refresh]="refresh"
     (dayClicked)="dayClicked($event.day)"
     (eventClicked)="handleEvent('Clicked', $event.event)"
@@ -107,8 +107,6 @@
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Edit task</h5>
-      <h4 class="modal-title">{{date_temporal}}</h4>
-
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -119,15 +117,11 @@
       <div>
         Task:
         <select name="tasca" formControlName="tasca">
-          <option
-            *ngFor="let tasca of tasques"
-            value="{{ tasca.id }}"
-          >
+          <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
             {{ tasca.nom }}
           </option>
         </select>
       </div>
-
 
       <div>
         Color:
@@ -142,8 +136,21 @@
       </div>
 
       <div>
+  <!--  -->
         Start date:
-        <input
+        <input matInput [matDatepicker]="picker"
+
+        class="form-control"
+        type="date"
+        (ngModelChange)="refresh.next()"
+        formControlName="dataInici"
+        value="{{ variable_date_inicial }}"
+        >
+<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-datepicker #picker></mat-datepicker>
+<!--  -->
+
+<!--         <input
           class="form-control"
           type="text"
           mwlFlatpickr
@@ -151,11 +158,12 @@
           [altInput]="true"
           [convertModelValue]="true"
           [enableTime]="true"
-          dateFormat="Y-m-dTH:i"
+          dateFormat="dTH-m-Y:i"
           altFormat="F j, Y H:i"
           placeholder="Not set"
           formControlName="dataInici"
-        />
+          value="{{ variable_date_inicial }}"
+        /> -->
       </div>
 
       <div>
@@ -168,10 +176,11 @@
           [altInput]="true"
           [convertModelValue]="true"
           [enableTime]="true"
-          dateFormat="Y-m-dTH:i"
+          dateFormat="dTH-m-Y:i"
           altFormat="F j, Y H:i"
           placeholder="Not set"
           formControlName="dataFinal"
+          value="{{ variable_date_final }}"
         />
       </div>
     </div>
@@ -226,18 +235,19 @@
       <div>
         Start date:
         <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="Y-m-dTH:i"
-          altFormat="F j, Y H:i"
-          placeholder="Not set"
-          formControlName="dataInici"
-        />
+        class="form-control"
+        type="text"
+        mwlFlatpickr
+        (ngModelChange)="refresh.next()"
+        [altInput]="true"
+        [convertModelValue]="true"
+        [enableTime]="true"
+        dateFormat="dTH-m-Y:i"
+        altFormat="F j, Y H:i"
+        placeholder="Not set"
+        formControlName="dataInici"
+        value="{{ date_inicial_modal_crear  }}"
+      />
       </div>
 
       <div>
@@ -250,7 +260,7 @@
           [altInput]="true"
           [convertModelValue]="true"
           [enableTime]="true"
-          dateFormat="Y-m-dTH:i"
+          dateFormat="dTH-m-Y:i"
           altFormat="F j, Y H:i"
           placeholder="Not set"
           formControlName="dataFinal"

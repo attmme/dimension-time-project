@@ -28,12 +28,13 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegisterFormComponent } from './modules/register-form/register-form.component';
 
-// nou
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { FormsModule } from '@angular/forms';
+// nou
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 //
 
 @NgModule({
@@ -66,7 +67,11 @@ import { FormsModule } from '@angular/forms';
     MatMomentDateModule,
     MatDatepickerModule,
 
-// nou
+    //nou
+    NgxMatTimepickerModule,
+    NgxMatDatetimePickerModule,
+    // nou
+
     BrowserAnimationsModule,
     CommonModule,
     FormsModule,
@@ -76,7 +81,6 @@ import { FormsModule } from '@angular/forms';
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
-// nou
   ],
   exports: [CommonModule, MaterialModule, NgbModalModule, FlatpickrModule], // calen els dos últims(?)
 
