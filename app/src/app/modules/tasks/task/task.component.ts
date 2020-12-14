@@ -69,9 +69,10 @@ export class TaskComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
-  dada_tmp: string | number;
-  dada_tasca_escollida_temporal: string | number;
-  dada_tasca_temps_unix: any; // temporal
+  date_temporal: Date = new Date();
+
+  events: CalendarEvent[] = [];
+  tasques = [];
 
   form: FormGroup = new FormGroup({
     tasca: new FormControl(''),
@@ -105,70 +106,6 @@ export class TaskComponent implements OnInit {
     },
   ];
 
-  events: CalendarEvent[] = [
-/*     {
-      id: 0,
-      cssClass: '0;1', // id usuari; id llistat tasques
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: this.colors.red,
-      actions: this.actions,
-      allDay: false,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    }, */
-/*     {
-      id: 1,
-      cssClass: '0;0', // id usuari; id tasca
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: this.colors.blue,
-      actions: this.actions,
-      allDay: false,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    }, */
-/*     {
-      id: 2,
-      cssClass: '0;0', // id usuari; id tasca
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: this.colors.blue,
-      actions: this.actions,
-      allDay: false,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    }, */
-/*     {
-      id: 3,
-      cssClass: '0;2', // id usuari; id tasca
-      start: subDays(startOfWeek(new Date()), 1),
-      end: addDays(startOfWeek(new Date()), 1),
-      title: 'A long event that spans 2 months',
-      color: this.colors.yellow,
-      allDay: false,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    }, */
-  ];
-
-  tasques = [];
-
   // constructor + funcions
   constructor(
     private modal: NgbModal,
@@ -184,18 +121,7 @@ export class TaskComponent implements OnInit {
       });
     });
 
-
-    this.guardarTasques();
-    //this.fbService.readColl(`users/${this.auth.getToken()}/tasks`).then((data) => {
-    /* this.fbService
-      .readColl(`users/LjovCXj05kOtSU1ok24lV0njpjm1/tasks`)
-      .then((data) => {
-        data.map((el, id) => {
-          console.log('tasca1: ', el['date_final'].seconds);
-          this.dada_tasca_temps_unix = el['date_final'].seconds * 1000;
-          // anar pintant tasca per tasca en el calendari
-        });
-      }); */
+    this.agafarTasquesDB();
 
     this.formulariCrear = this.formBuilder.group({
       tasca: ['', [Validators.required]],
@@ -216,20 +142,6 @@ export class TaskComponent implements OnInit {
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     this.modal.open(this.modalCrear, { size: 'lg' });
-
-    /*     if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-        console.log('activeDayIsOpen false');
-      } else {
-        this.activeDayIsOpen = true;
-        console.log('activeDayIsOpen true');
-      }
-      this.viewDate = date;
-    } */
   }
 
   eventTimesChanged({
@@ -261,10 +173,8 @@ export class TaskComponent implements OnInit {
       console.log('evento: ', event);
       console.log('id evento: ', event.id);
       console.log('cssClass evento: ', event.cssClass);
-      console.log('id usuari: ', dades_parseadas[0]);
-      console.log('id tasca seleccionada: ', dades_parseadas[1]);
-
-      this.dada_tmp = dades_parseadas[1];
+      console.log('id única de la tasca usuari: ', dades_parseadas[0]);
+      console.log('id llistat de tasques: ', dades_parseadas[1]);
 
       // dades del evento  ==> donar-li al modal
 
@@ -272,23 +182,6 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  /*   addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
-  }
- */
   deleteEvent(eventToDelete: CalendarEvent) {
     this.events = this.events.filter((event) => event !== eventToDelete);
   }
@@ -303,40 +196,32 @@ export class TaskComponent implements OnInit {
 
   editarTasca() {}
 
-  guardarTasques() {
-    /*
-    this.fbService.readColl(`users/LjovCXj05kOtSU1ok24lV0njpjm1/tasks`).then((data) => {
-      data.map((el, id) => {
-        console.log('tasca1: ', el['date_final'].seconds );
-        this.dada_tasca_temps_unix = (el['date_final'].seconds*1000);
-        // anar pintant tasca per tasca en el calendari
+  // de la DB => web
+  agafarTasquesDB() {
+    this.fbService
+      .readColl(`users/${this.auth.getToken()}/tasks`)
+      .then((data) => {
+        data.map((element, id) => {
+          this.events = [
+            ...this.events,
+            {
+              id: element['id'],
+              cssClass: `${element['id']};${element['id_llistat_tasques']}`, // id usuari; id llistat tasques
+              start: new Date(element['data_inici'].seconds * 1000),
+              end: new Date(element['data_final'].seconds * 1000),
+              title: element['titol'],
+              color: element['color'],
+              actions: this.actions,
+              allDay: false,
+              draggable: true,
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+            },
+          ];
+        });
       });
-    });
-     */
-    /*     let _color = this.colors[this.formulariCrear.value.colorPrimari];
-
-    let paquet_de_dades = `${0};${this.formulariCrear.value.tasca}`;
-
-    this.events = [
-      ...this.events,
-      {
-        id: this.events.length, // nova id = tamany array ( final array )
-        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
-        start: this.formulariCrear.value.dataInici,
-        end: this.formulariCrear.value.dataFinal,
-        title: this.donarTasca(this.formulariCrear.value.tasca),
-        color: _color,
-        actions: this.actions,
-        allDay: false,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
- */
-    // console.log("eventos després: ", this.events);
   }
 
   crearTasca() {
@@ -366,7 +251,11 @@ export class TaskComponent implements OnInit {
       },
     ];
 
-    // console.log("eventos després: ", this.events);
+    let usuari = this.auth.getToken();
+    this.fbService.crearEstructuraColeccio(
+      'users/' + usuari + '/tasks',
+      this.events[this.events.length - 1]
+    );
   }
 
   donarTasca(id): string {
@@ -374,8 +263,7 @@ export class TaskComponent implements OnInit {
     return nom_tasca.nom;
   }
 
-  crearDBTest()
-  {
+  crearDBTest() {
     let usuari = this.auth.getToken();
 
     let tasques_usuari = [
@@ -414,8 +302,10 @@ export class TaskComponent implements OnInit {
     ];
 
     for (let i = 0; i < tasques_usuari.length; i++) {
-      this.fbService.crearEstructuraColeccio('users/' + usuari + '/tasks', tasques_usuari[i]);
+      this.fbService.crearEstructuraColeccio(
+        'users/' + usuari + '/tasks',
+        tasques_usuari[i]
+      );
     }
-
   }
 }

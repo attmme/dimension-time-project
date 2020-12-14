@@ -70,7 +70,7 @@
   <mwl-calendar-month-view
     *ngSwitchCase="CalendarView.Month"
     [viewDate]="viewDate"
-    [events]="events"
+    [events]="events "
     [refresh]="refresh"
     (dayClicked)="dayClicked($event.day)"
     (eventClicked)="handleEvent('Clicked', $event.event)"
@@ -107,7 +107,6 @@
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Edit task</h5>
-      <h3 class="modal-title">test: {{ dada_tmp }}</h3>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -194,9 +193,7 @@
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Create a new task</h5>
-
-      <h4 class="modal-title">{{dada_tasca_temps_unix | date: 'dd/MM/yyyy h:mm:ss a' }}</h4>
-
+      <h4 class="modal-title">{{date_temporal}}</h4>
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>

@@ -39,11 +39,11 @@ export class FirebaseService {
 
     collection.doc( dades.id.toString()  ).set({
       id: dades.id,
-      id_llistat_tasques: dades.id_llistat_tasques,
-      data_inici: dades.data_inici,
-      data_final: dades.data_final,
+      id_llistat_tasques: dades.cssClass.split(';')[1], // cssClass element[1] = id llistat tasques
+      data_inici: dades.start,
+      data_final: dades.end,
       color: dades.color,
-      titol: dades.titol,
+      titol: dades.title,
     });
   }
 
