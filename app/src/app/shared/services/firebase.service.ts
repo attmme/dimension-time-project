@@ -20,6 +20,15 @@ export class FirebaseService {
     this.user = firebaseAuth.authState;
   }
 
+  // Guardar time-task
+  task(){ //dades: object
+    let collection = this.firestore.collection("users");
+
+    collection.doc("test").set({
+      prova: "prova"
+    })
+  }
+
   // Registro
   registrar(user: string, email: string, password: string) {
     return this.firebaseAuth
@@ -36,6 +45,7 @@ export class FirebaseService {
 
   // Login
   login(email: string, password: string) {
+    this.task();
     // Retornem una promesa, es consumeix en login.form.component
     return this.firebaseAuth.signInWithEmailAndPassword(email, password);
   }
