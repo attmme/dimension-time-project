@@ -24,7 +24,6 @@ export class HeaderComponent implements OnInit {
   templatePersonal: TemplateRef<any>;
 
   llista = [];
-
   nomUsuari: string;
 
   constructor(
@@ -46,18 +45,19 @@ export class HeaderComponent implements OnInit {
   isLogged = () => localStorage.getItem('userId');
 
   clickPersonal() {
-    this.modal.open(this.templatePersonal, { size: 'lg' });
+    // refrescar la llista
+    this.agafarTasquesUsuariDB().then(
+      ()=>{
+        this.modal.open(this.templatePersonal, { size: 'lg' });
+      }
+    );
   }
 
   dataToHMS(data_inici, data_final) {
     let tempsInici = +new Date(data_inici);
     let tempsFinal = +new Date(data_final);
     let seconds = Math.abs(tempsFinal - tempsInici);
-
     //console.log("PROVES: ", new Date(seconds * 1000).toISOString());
-
-
-
     return new Date(seconds * 1000).toISOString().substr(11, 8);
   }
 
@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit {
 
     this.llista = [];
 
-    this.fbService
+    return this.fbService
       .readColl(`users/${this.service.getToken()}/tasks`)
       .then((data) => {
         data.map(element => {
