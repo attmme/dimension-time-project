@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../shared/services/firebase.service';
+import { provideRoutes } from '@angular/router';
 
 @Component({
   selector: 'app-task',
@@ -57,10 +58,17 @@ export class TaskComponent implements OnInit {
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
 
+
+  ////////////////////////////// Jesucristo
+  // Variables edit
+  diaClicat = new Date();
+  dataIni = new Date();
+  dataFi = new Date();
+  //////////////////////////////
+
+
   //a millorar
   date_inicial_modal_crear: Date;
-  variable_date_inicial: Date = new Date();
-  variable_date_final: Date = new Date();
 
   events: CalendarEvent[] = [];
   tasques = [];
@@ -177,22 +185,19 @@ export class TaskComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
 
-  ///////////////////////////////
-  public selectedMoments = [
-    new Date(2018, 1, 12, 10, 30),
-    new Date(2018, 3, 21, 20, 30)
-  ];
-  ///////////////////////////////
 
   handleEvent(action: string, event: CalendarEvent): void {
-
     this.modalData = { event, action };
+
+    /////////////// Jesucristo 2.0
+    this.dataIni = event.start;
+    this.dataFi = event.end;
+    ///////////////
 
     if (action == 'Clicked') {
       let dades_parseadas = event.cssClass.split(';');
 
-      this.variable_date_inicial = event.start;
-      this.variable_date_final = event.end;
+
 
       const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
 
@@ -216,8 +221,6 @@ export class TaskComponent implements OnInit {
   submitEditarTasca() {
   }
 
-
-  // NO VA
   crearTasca() {
     console.log("crear tasca: ", this.formulariCrear.value);
 
@@ -250,15 +253,10 @@ export class TaskComponent implements OnInit {
     );
   }
 
-
-
   donarTasca(id): string {
     let nom_tasca = this.tasques.find((element) => element.id == id);
     return nom_tasca.nom;
   }
-
-
-
 
   // Omplir BDD amb valors per testing
   crearDBTest() {
