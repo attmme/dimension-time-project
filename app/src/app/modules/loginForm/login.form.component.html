@@ -21,10 +21,14 @@
 
         <p>
           <mat-form-field class="form-group">
-            <input matInput minlength="6" placeholder="Password" type="password" formControlName="password" class="form-control">
+            <input matInput placeholder="Password" type="password" formControlName="password" class="form-control">
 
               <mat-error *ngIf="registerForm.hasError('required', 'password')">
                 Password is required
+              </mat-error>
+
+              <mat-error *ngIf="registerForm.hasError('minlength', 'password')">
+                Must have 6 characters
               </mat-error>
 
           </mat-form-field>
@@ -36,7 +40,7 @@
             Login
           </button>
 
-          <mat-hint><a href="/register">Not registered yet?</a></mat-hint>
+          <mat-hint><a [routerLink]="['/register']">Not registered yet?</a></mat-hint>
 
           <mat-error *ngIf="(resposta_server)==1">
             Email doesn't exists
