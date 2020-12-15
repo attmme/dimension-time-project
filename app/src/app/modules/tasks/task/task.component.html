@@ -4,15 +4,29 @@
 <div class="row text-center">
   <div class="col-md-4">
     <div class="btn-group">
-      <div class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
         Previous
       </div>
-      <div class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
         Today
       </div>
-      <div class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()">
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
         Next
       </div>
     </div>
@@ -22,13 +36,25 @@
   </div>
   <div class="col-md-4">
     <div class="btn-group">
-      <div class="btn btn-primary" (click)="setView(CalendarView.Month)" [class.active]="view === CalendarView.Month">
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+      >
         Month
       </div>
-      <div class="btn btn-primary" (click)="setView(CalendarView.Week)" [class.active]="view === CalendarView.Week">
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
+      >
         Week
       </div>
-      <div class="btn btn-primary" (click)="setView(CalendarView.Day)" [class.active]="view === CalendarView.Day">
+      <div
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+      >
         Day
       </div>
     </div>
@@ -41,22 +67,39 @@
 <div [ngSwitch]="view">
   <!-- calendari, vista mensual -->
   <!-- [activeDayIsOpen]="activeDayIsOpen" ,linia 75 -->
-  <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
-    [refresh]="refresh" (dayClicked)="dayClicked($event.day)" (eventClicked)="handleEvent('Clicked', $event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)">
+  <mwl-calendar-month-view
+    *ngSwitchCase="CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (dayClicked)="dayClicked($event.day)"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
   </mwl-calendar-month-view>
 
   <!-- calendari, vista setmanal -->
-  <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+  <mwl-calendar-week-view
+    *ngSwitchCase="CalendarView.Week"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
   </mwl-calendar-week-view>
 
   <!-- calendari, vista diaria -->
-  <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-    (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+  <mwl-calendar-day-view
+    *ngSwitchCase="CalendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events"
+    [refresh]="refresh"
+    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventTimesChanged)="eventTimesChanged($event)"
+  >
   </mwl-calendar-day-view>
 </div>
-
 
 <!-- El modal per a editar una tasca -->
 <ng-template #modalEditar let-close="close">
@@ -75,16 +118,29 @@
       <div class="start">
         Start date:
         <!-- [selectMode]="'rangeFrom'"  -->
-        <input [(ngModel)]="dataIni" [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
-          (ngModelChange)="refresh.next()" class="form-control">
+        <input
+          [(ngModel)]="dataIni"
+          [owlDateTime]="ds"
+          [owlDateTimeTrigger]="ds"
+          formControlName="dataInici"
+          (ngModelChange)="refresh.next()"
+          class="form-control"
+        />
         <owl-date-time #ds></owl-date-time>
       </div>
 
       <div class="end">
         End date:
         <!-- [selectMode]="'rangeTo'" -->
-        <input [(ngModel)]="dataFi" [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal"
-          (ngModelChange)="refresh.next()" class="form-control" value="12/10/2020, 1:04 AM">
+        <input
+          [(ngModel)]="dataFi"
+          [owlDateTime]="de"
+          [owlDateTimeTrigger]="de"
+          formControlName="dataFinal"
+          (ngModelChange)="refresh.next()"
+          class="form-control"
+          value="12/10/2020, 1:04 AM"
+        />
         <owl-date-time #de></owl-date-time>
       </div>
 
@@ -101,22 +157,34 @@
         <div class="color">
           Color:
           <select name="colorPrimari" formControlName="colorPrimari">
-            <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
+            <option
+              *ngFor="let color of colors | keyvalue"
+              value="{{ color.key }}"
+            >
               {{ color.key }}
             </option>
           </select>
         </div>
       </div>
-
     </div>
 
     <!-- Botons -->
     <div class="modal-footer">
-      <button class="btn btn-danger" type="button" (click)="close()" (click)="eliminar_tasca()">
+      <button
+        class="btn btn-danger"
+        type="button"
+        (click)="close()"
+        (click)="eliminar_tasca()"
+      >
         Delete
       </button>
 
-      <button class="btn btn-primary" type="submit" (click)="close()" (click)="guardar_tasca()">
+      <button
+        class="btn btn-primary"
+        type="submit"
+        (click)="close()"
+        (click)="guardar_tasca()"
+      >
         Save
       </button>
 
@@ -140,17 +208,28 @@
 
     <!-- inputs crear tasca  -->
     <div class="modal-body">
-
       <div class="start">
         Start-date:
-        <input [(ngModel)]="diaClicat" [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
-          class="form-control">
-        <owl-date-time #ds></owl-date-time>
+        <input
+          [(ngModel)]="diaClicat"
+          [owlDateTime]="ds"
+          [owlDateTimeTrigger]="ds"
+          formControlName="dataInici"
+          class="form-control"
+          (ngModelChange)="test($event)"
+        />
+        <owl-date-time  #ds></owl-date-time>
       </div>
 
       <div class="end">
         End-date:
-        <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" class="form-control">
+        <input
+          [owlDateTime]="de"
+          [owlDateTimeTrigger]="de"
+          formControlName="dataFinal"
+          class="form-control"
+          (ngModelChange)="test($event)"
+        />
         <owl-date-time #de></owl-date-time>
       </div>
 
@@ -163,22 +242,24 @@
             </option>
           </select>
         </div>
-  
+
         <div class="color">
           Color:
           <select name="colorPrimari" formControlName="colorPrimari">
-            <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
+            <option
+              *ngFor="let color of colors | keyvalue"
+              value="{{ color.key }}"
+            >
               {{ color.key }}
             </option>
           </select>
         </div>
       </div>
-
     </div>
 
     <!-- Botons -->
     <div class="modal-footer">
-      <button class="btn btn-primary" type="submit" (click)="close()">
+      <button class="btn btn-primary" type="submit" [disabled]="bloqueig_boto" (click)="close()">
         Create
       </button>
 

@@ -80,6 +80,7 @@ export class TaskComponent implements OnInit {
   formulariEditar: FormGroup;
   editar_borrar: number;
   buttonType: string;
+  bloqueig_boto: boolean;
 
   ////////////////////////////// Jesucristo
   // Variables edit
@@ -127,6 +128,44 @@ export class TaskComponent implements OnInit {
       },
     },
   ];
+
+  test(evento) {
+    let inici = new Date(this.formulariCrear.value.dataInici);
+    let final = new Date(this.formulariCrear.value.dataFinal);
+
+
+    let sonIguals = this.datesIguals(inici, final);
+    this.bloqueig_boto = !sonIguals;
+    console.log('son iguals?: ', sonIguals);
+
+    //console.log( ((year1+month1+day1) != NaN) );
+  }
+
+  datesIguals(data1, data2): boolean {
+    let month1 = data1.getUTCMonth() + 1; //months from 1-12
+    let day1 = data1.getUTCDate();
+    let year1 = data1.getUTCFullYear();
+
+    let hora1 = data1.getUTCHours();
+    let minuts1 = data1.getUTCMinutes();
+
+    let month2 = data2.getUTCMonth() + 1; //months from 1-12
+    let day2 = data2.getUTCDate();
+    let year2 = data2.getUTCFullYear();
+
+    let hora2 = data2.getUTCHours();
+    let minuts2 = data2.getUTCMinutes();
+
+    let newdate1 = year1 + '/' + month1 + '/' + day1;
+    let newdate2 = year2 + '/' + month2 + '/' + day2;
+
+    let esNumero = year1 + month1 + day1 > 0;
+    let datesIguals = newdate1 === newdate2;
+    let horesCorrectes = hora2 >= hora1;
+    let minutsCorrectes = minuts2 >= minuts1;
+
+    return datesIguals && esNumero && horesCorrectes && minutsCorrectes;
+  }
 
   // Inici APP
   ngOnInit(): void {

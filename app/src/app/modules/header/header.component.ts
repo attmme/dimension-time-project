@@ -46,15 +46,17 @@ export class HeaderComponent implements OnInit {
   isLogged = () => localStorage.getItem('userId');
 
   clickPersonal() {
-    console.log('Total:', this.dataToHMS(4));
-
     this.modal.open(this.templatePersonal, { size: 'lg' });
   }
 
-  dataToHMS(index) {
-    let tempsInici = +new Date(this.llista[index].data_inici);
-    let tempsFinal = +new Date(this.llista[index].data_final);
+  dataToHMS(data_inici, data_final) {
+    let tempsInici = +new Date(data_inici);
+    let tempsFinal = +new Date(data_final);
     let seconds = Math.abs(tempsFinal - tempsInici);
+
+    //console.log("PROVES: ", new Date(seconds * 1000).toISOString());
+
+
 
     return new Date(seconds * 1000).toISOString().substr(11, 8);
   }
@@ -67,13 +69,15 @@ export class HeaderComponent implements OnInit {
     this.fbService
       .readColl(`users/${this.service.getToken()}/tasks`)
       .then((data) => {
-        data.map((element) => {
+        data.map(element => {
+
+          let d_init = element['data_inici'].seconds;
+          let d_final = element['data_final'].seconds;
           this.llista = [
             ...this.llista,
             {
               id: element['id'],
-              data_inici: element['data_inici'].seconds,
-              data_final: element['data_final'].seconds,
+              horesMinutsSegons: this.dataToHMS(d_init, d_final),
               titol: element['titol'],
               color: element['color'],
             },
