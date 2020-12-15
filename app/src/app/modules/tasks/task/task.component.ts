@@ -1,14 +1,37 @@
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 // Input
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef,
+  OnInit,
+} from '@angular/core';
 
 // endOfDay, isSameDay, isSameMonth
-import { startOfDay, subDays, addDays, endOfMonth, addHours, startOfWeek, } from 'date-fns';
+import {
+  startOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  addHours,
+  startOfWeek,
+} from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  CalendarEvent,
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+} from 'angular-calendar';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { FirebaseService } from '../../../shared/services/firebase.service';
 import { provideRoutes } from '@angular/router';
 
@@ -18,7 +41,6 @@ import { provideRoutes } from '@angular/router';
   styleUrls: ['./task.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class TaskComponent implements OnInit {
   // Constructor
   constructor(
@@ -26,8 +48,7 @@ export class TaskComponent implements OnInit {
     public formBuilder: FormBuilder,
     private fbService: FirebaseService,
     private auth: AuthService
-  ) { }
-
+  ) {}
 
   // Colors del picker
   colors: any = {
@@ -63,6 +84,7 @@ export class TaskComponent implements OnInit {
   diaClicat = new Date();
   dataIni = new Date();
   dataFi = new Date();
+  dataID: string | number;
   //////////////////////////////
 
   //a millorar
@@ -77,6 +99,7 @@ export class TaskComponent implements OnInit {
     colorSecundari: new FormControl(''),
     dataInici: new FormControl(''),
     dataFinal: new FormControl(''),
+    id_formulari: new FormControl(''),
   });
 
   // temporal
@@ -127,6 +150,7 @@ export class TaskComponent implements OnInit {
       colorSecundari: ['', [Validators.required]],
       dataInici: ['', [Validators.required]],
       dataFinal: ['', [Validators.required]],
+      id_formulari: [''],
     });
   }
 
@@ -135,7 +159,7 @@ export class TaskComponent implements OnInit {
     this.fbService
       .readColl(`users/${this.auth.getToken()}/tasks`)
       .then((data) => {
-        data.map(element => {
+        data.map((element) => {
           this.events = [
             ...this.events,
             {
@@ -189,6 +213,7 @@ export class TaskComponent implements OnInit {
     /////////////// Jesucristo 2.0
     this.dataIni = event.start;
     this.dataFi = event.end;
+    this.dataID = this.modalData.event.id;
     ///////////////
 
     if (action == 'Clicked') {
@@ -213,35 +238,35 @@ export class TaskComponent implements OnInit {
   submitEditarTasca() {
     let _color = this.colors[this.formulariEditar.value.colorPrimari];
     let paquet_de_dades = `${0};${this.formulariEditar.value.tasca}`;
-    this.events = [
-      ...this.events,
-      {
-        id: this.events.length, // nova id = tamany array ( final array )
-        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
-        start: this.formulariEditar.value.dataInici,
-        end: this.formulariEditar.value.dataFinal,
-        title: this.donarTasca(this.formulariEditar.value.tasca),
-        color: _color,
-        actions: this.actions,
-        allDay: false,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
+
+    let evento = {
+      id: this.events.length, // nova id = tamany array ( final array )
+      cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
+      start: this.formulariEditar.value.dataInici,
+      end: this.formulariEditar.value.dataFinal,
+      title: this.donarTasca(this.formulariEditar.value.tasca),
+      color: _color,
+      actions: this.actions,
+      allDay: false,
+      draggable: true,
+      resizable: {
+        beforeStart: true,
+        afterEnd: true,
       },
-    ];
+    };
 
     // Borrar actual de la bdd
-    let idBorrar = (this.events.length-2).toString();
-    let idUsuariBorrar = this.auth.getToken();
-    this.fbService.delete(idUsuariBorrar, idBorrar);
+    let idDocumentBorrar = this.dataID.toString();
+    let idUsuari = this.auth.getToken();
+    this.fbService.delete(idUsuari, idDocumentBorrar);
 
     // Crear una amb la nova
-    this.fbService.crearEstructuraColeccio(
-      'users/' + idUsuariBorrar + '/tasks',
-      this.events[this.events.length - 1]
-    );
+    this.fbService
+      .crearEstructuraColeccio('users/' + idUsuari + '/tasks', evento)
+      .then(() => {
+        this.events = [];
+        this.agafarTasquesDB();
+      });
   }
 
   crearTasca() {
@@ -284,7 +309,7 @@ export class TaskComponent implements OnInit {
     let tasques_usuari = [
       {
         id: 0,
-        cssClass: "0;1",
+        cssClass: '0;1',
         start: subDays(startOfDay(new Date()), 1),
         end: addDays(new Date(), 1),
         color: this.colors.red,
@@ -292,7 +317,7 @@ export class TaskComponent implements OnInit {
       },
       {
         id: 1,
-        cssClass: "0;2",
+        cssClass: '0;2',
         start: subDays(endOfMonth(new Date()), 3),
         end: addDays(endOfMonth(new Date()), 3),
         color: this.colors.blue,
@@ -300,7 +325,7 @@ export class TaskComponent implements OnInit {
       },
       {
         id: 2,
-        cssClass: "0;0",
+        cssClass: '0;0',
         start: addHours(startOfDay(new Date()), 2),
         end: addHours(new Date(), 2),
         color: this.colors.blue,
@@ -308,7 +333,7 @@ export class TaskComponent implements OnInit {
       },
       {
         id: 3,
-        cssClass: "0;0",
+        cssClass: '0;0',
         start: subDays(startOfWeek(new Date()), 1),
         end: addDays(startOfWeek(new Date()), 1),
         color: this.colors.yellow,
