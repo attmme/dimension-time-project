@@ -76,6 +76,11 @@ export class FirebaseService {
       });
   }
 
+  // Eliminar document
+  delete(id_usuari:string, id: string){
+     this.firestore.collection(`users/${id_usuari}/tasks`).doc(id).delete();
+  }
+
   // Login
   login(email: string, password: string) {
     // Retornem una promesa, es consumeix en login.form.component

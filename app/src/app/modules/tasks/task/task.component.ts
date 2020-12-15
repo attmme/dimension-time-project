@@ -58,14 +58,12 @@ export class TaskComponent implements OnInit {
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
 
-
   ////////////////////////////// Jesucristo
   // Variables edit
   diaClicat = new Date();
   dataIni = new Date();
   dataFi = new Date();
   //////////////////////////////
-
 
   //a millorar
   date_inicial_modal_crear: Date;
@@ -185,7 +183,6 @@ export class TaskComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
 
-
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
 
@@ -196,12 +193,7 @@ export class TaskComponent implements OnInit {
 
     if (action == 'Clicked') {
       let dades_parseadas = event.cssClass.split(';');
-
-
-
       const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
-
-      //puntero.componentInstance.dataFinal = event.end;
     }
   }
 
@@ -219,15 +211,42 @@ export class TaskComponent implements OnInit {
 
   // Al guardar un edit d'una tasca
   submitEditarTasca() {
+    let _color = this.colors[this.formulariEditar.value.colorPrimari];
+    let paquet_de_dades = `${0};${this.formulariEditar.value.tasca}`;
+    this.events = [
+      ...this.events,
+      {
+        id: this.events.length, // nova id = tamany array ( final array )
+        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
+        start: this.formulariEditar.value.dataInici,
+        end: this.formulariEditar.value.dataFinal,
+        title: this.donarTasca(this.formulariEditar.value.tasca),
+        color: _color,
+        actions: this.actions,
+        allDay: false,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+      },
+    ];
+
+    // Borrar actual de la bdd
+    let idBorrar = (this.events.length-2).toString();
+    let idUsuariBorrar = this.auth.getToken();
+    this.fbService.delete(idUsuariBorrar, idBorrar);
+
+    // Crear una amb la nova
+    this.fbService.crearEstructuraColeccio(
+      'users/' + idUsuariBorrar + '/tasks',
+      this.events[this.events.length - 1]
+    );
   }
 
   crearTasca() {
-    console.log("crear tasca: ", this.formulariCrear.value);
-
     let _color = this.colors[this.formulariCrear.value.colorPrimari];
-
     let paquet_de_dades = `${0};${this.formulariCrear.value.tasca}`;
-
     this.events = [
       ...this.events,
       {
