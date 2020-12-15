@@ -59,7 +59,7 @@
 
 <!-- El modal per a editar una tasca -->
 <ng-template #modalEditar let-close="close">
-  <form [formGroup]="formulariEditar" (ngSubmit)="editarTasca()">
+  <form [formGroup]="formulariEditar" (ngSubmit)="submitEditarTasca()">
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Edit task</h5>
@@ -87,38 +87,21 @@
           </option>
         </select>
       </div>
-
       <div>
-        <!--  -->
         Start date:
-        <input matInput [matDatepicker]="picker" class="form-control" type="date" (ngModelChange)="refresh.next()"
-          formControlName="dataInici" value="{{ variable_date_inicial }}">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <!--  -->
-
-        <!--         <input
-          class="form-control"
-          type="text"
-          mwlFlatpickr
-          (ngModelChange)="refresh.next()"
-          [altInput]="true"
-          [convertModelValue]="true"
-          [enableTime]="true"
-          dateFormat="dTH-m-Y:i"
-          altFormat="F j, Y H:i"
-          placeholder="Not set"
-          formControlName="dataInici"
-          value="{{ variable_date_inicial }}"
-        /> -->
+        <!-- "dataInici" -->
+        <input [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
+          (ngModelChange)="refresh.next()" class="form-control">
+        <owl-date-time #ds></owl-date-time>
       </div>
 
       <div>
         End date:
-        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
-          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
-          placeholder="Not set" formControlName="dataFinal" value="{{ variable_date_final }}" />
+        <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" (ngModelChange)="refresh.next()"
+          class="form-control" value="12/10/2020, 1:04 AM">
+        <owl-date-time #de></owl-date-time>
       </div>
+
     </div>
 
     <!-- Botons -->
@@ -148,6 +131,19 @@
     <!-- inputs crear tasca  -->
     <div class="modal-body">
       <div>
+
+        <div>
+          Start-date:
+          <input [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici" class="form-control">
+          <owl-date-time #ds></owl-date-time>
+        </div>
+
+        <div>
+          End-date:
+          <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" class="form-control">
+          <owl-date-time #de></owl-date-time>
+        </div>
+
         Task:
         <select name="tasca" formControlName="tasca">
           <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
@@ -155,9 +151,6 @@
           </option>
         </select>
       </div>
-
-      <input [owlDateTime]="dt" [owlDateTimeTrigger]="dt">
-      <owl-date-time #dt></owl-date-time>
 
       <div>
         Color:
@@ -168,19 +161,6 @@
         </select>
       </div>
 
-<!--       <div>
-        Start date:
-        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
-          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
-          placeholder="Not set" formControlName="dataInici" value="{{ date_inicial_modal_crear  }}" />
-      </div>
-
-      <div>
-        End date:
-        <input class="form-control" type="text" mwlFlatpickr (ngModelChange)="refresh.next()" [altInput]="true"
-          [convertModelValue]="true" [enableTime]="true" dateFormat="dTH-m-Y:i" altFormat="F j, Y H:i"
-          placeholder="Not set" formControlName="dataFinal" />
-      </div> -->
     </div>
 
     <!-- Botons -->

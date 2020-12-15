@@ -34,10 +34,8 @@ export class FirebaseService {
   crearEstructuraColeccio(ruta: string, dades: any) {
     let collection = this.firestore.collection(ruta);
 
-
     // Agafar l'objecte i canviar aquí el contingut
-
-    collection.doc( dades.id.toString()  ).set({
+    collection.doc(dades.id.toString()).set({
       id: dades.id,
       id_llistat_tasques: dades.cssClass.split(';')[1], // cssClass element[1] = id llistat tasques
       data_inici: dades.start,

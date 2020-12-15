@@ -1,38 +1,14 @@
 import { AuthService } from 'src/app/shared/services/auth.service';
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ViewChild,
-  TemplateRef,
-  OnInit,
-  Input,
-} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours,
-  startOfWeek,
-} from 'date-fns';
+
+// Input
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
+
+// endOfDay, isSameDay, isSameMonth
+import { startOfDay, subDays, addDays, endOfMonth, addHours, startOfWeek, } from 'date-fns';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-} from 'angular-calendar';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FirebaseService } from '../../../shared/services/firebase.service';
 
 @Component({
@@ -41,7 +17,19 @@ import { FirebaseService } from '../../../shared/services/firebase.service';
   styleUrls: ['./task.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class TaskComponent implements OnInit {
+  // Constructor
+  constructor(
+    private modal: NgbModal,
+    public formBuilder: FormBuilder,
+    private fbService: FirebaseService,
+    private auth: AuthService
+  ) { }
+
+  //public dataActual = new Date(2018, 1, 12, 10, 30);
+
+  // Colors del picker
   colors: any = {
     red: {
       primary: '#ad2121',
@@ -69,6 +57,7 @@ export class TaskComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
+
   //a millorar
   date_inicial_modal_crear: Date;
   variable_date_inicial: Date = new Date();
@@ -84,8 +73,8 @@ export class TaskComponent implements OnInit {
     dataInici: new FormControl(''),
     dataFinal: new FormControl(''),
   });
-  // temporal
 
+  // temporal
   modalData: {
     action: string;
     event: CalendarEvent;
@@ -109,21 +98,14 @@ export class TaskComponent implements OnInit {
     },
   ];
 
-  // constructor + funcions
-  constructor(
-    private modal: NgbModal,
-    public formBuilder: FormBuilder,
-    private fbService: FirebaseService,
-    private auth: AuthService
-  ) {}
-
+  // Inici APP
   ngOnInit(): void {
+    // Llegeix les tasques de trello al carregar l'app
     this.fbService.readColl('tasks').then((data) => {
-      data.map((el, id) => {
-        this.tasques.push({ id: id, nom: el['nom'] });
-      });
+      data.map((el, id) => this.tasques.push({ id: id, nom: el['nom'] }));
     });
 
+    // Agafa les dades de la DB i les passa a la web
     this.agafarTasquesDB();
 
     this.formulariCrear = this.formBuilder.group({
@@ -143,6 +125,36 @@ export class TaskComponent implements OnInit {
     });
   }
 
+  // Agafa les dades de la DB i les passa a la web
+  agafarTasquesDB() {
+    this.fbService
+      .readColl(`users/${this.auth.getToken()}/tasks`)
+      .then((data) => {
+        data.map(element => {
+          this.events = [
+            ...this.events,
+            {
+              id: element['id'],
+              cssClass: `${element['id']};${element['id_llistat_tasques']}`, // id usuari; id llistat tasques
+              start: new Date(element['data_inici'].seconds * 1000),
+              end: new Date(element['data_final'].seconds * 1000),
+              title: element['titol'],
+              color: element['color'],
+              actions: this.actions,
+              allDay: false,
+              draggable: true,
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+            },
+          ];
+        });
+        this.refresh.next();
+      });
+  }
+
+  // Entra al clickar u dia per crear una nova tasca
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     this.date_inicial_modal_crear = date;
     this.modal.open(this.modalCrear, { size: 'lg' });
@@ -167,36 +179,19 @@ export class TaskComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    console.log('handleEvent(): ', action);
 
     this.modalData = { event, action };
 
     if (action == 'Clicked') {
       let dades_parseadas = event.cssClass.split(';');
 
-      console.log('evento: ', event);
-      console.log('id evento: ', event.id);
-      console.log('cssClass evento: ', event.cssClass);
-      console.log('id única de la tasca usuari: ', dades_parseadas[0]);
-      console.log('id llistat de tasques: ', dades_parseadas[1]);
-
-      // dades del evento  ==> donar-li al modal
-      // console.log('ABANS: ' + this.formulariEditar.controls['dataInici']);
-      // this.formulariEditar.controls['dataInici'].setValue(event.start);
-      // console.log('DESPRES: ' + this.formulariEditar.controls['dataInici']);
-
-      console.log("start: ", event.start.toString() );
-      console.log("start: ", event.start.toTimeString() );
-      console.log("start: ", event.start.toISOString() );
-      console.log("start: ", event.start.toLocaleDateString() );
-      console.log("start: ", event.start.toUTCString() );
-      console.log("start: ", event.start.toLocaleTimeString() );
       this.variable_date_inicial = event.start;
       this.variable_date_final = event.end;
 
-      // this.formulariEditar.controls['dataFinal'].setValue(event.end);
-      // console.log("asd: ", this.formulariEditar.controls.dataInici.value );
       const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
+
+      //console.log(event.start)
+      this.formulariCrear.value.dataInici = "asd";
       //puntero.componentInstance.dataFinal = event.end;
     }
   }
@@ -213,39 +208,12 @@ export class TaskComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  editarTasca() {
-    console.log('editar tasca');
+  // Al guardar un edit d'una tasca
+  submitEditarTasca() {
   }
 
-  // de la DB => web
-  agafarTasquesDB() {
-    this.fbService
-      .readColl(`users/${this.auth.getToken()}/tasks`)
-      .then((data) => {
-        data.map((element, id) => {
-          this.events = [
-            ...this.events,
-            {
-              id: element['id'],
-              cssClass: `${element['id']};${element['id_llistat_tasques']}`, // id usuari; id llistat tasques
-              start: new Date(element['data_inici'].seconds * 1000),
-              end: new Date(element['data_final'].seconds * 1000),
-              title: element['titol'],
-              color: element['color'],
-              actions: this.actions,
-              allDay: false,
-              draggable: true,
-              resizable: {
-                beforeStart: true,
-                afterEnd: true,
-              },
-            },
-          ];
-        });
-        this.refresh.next();
-      });
-  }
 
+  // NO VA
   crearTasca() {
     console.log("crear tasca: ", this.formulariCrear.value);
 
@@ -272,75 +240,66 @@ export class TaskComponent implements OnInit {
       },
     ];
 
-    // let usuari = this.auth.getToken();
-    // this.fbService.crearEstructuraColeccio(
-    //   'users/' + usuari + '/tasks',
-    //   this.events[this.events.length - 1]
-    // );
+    this.fbService.crearEstructuraColeccio(
+      'users/' + this.auth.getToken() + '/tasks',
+      this.events[this.events.length - 1]
+    );
   }
+
+
 
   donarTasca(id): string {
     let nom_tasca = this.tasques.find((element) => element.id == id);
     return nom_tasca.nom;
   }
 
+
+
+
+  // Omplir BDD amb valors per testing
   crearDBTest() {
     let usuari = this.auth.getToken();
 
     let tasques_usuari = [
       {
         id: 0,
-        data_inici: subDays(startOfDay(new Date()), 1),
-        data_final: addDays(new Date(), 1),
+        cssClass: "0;1",
+        start: subDays(startOfDay(new Date()), 1),
+        end: addDays(new Date(), 1),
         color: this.colors.red,
-        titol: 'A 3 day event',
-        id_llistat_tasques: 1,
+        title: 'A 3 day event',
       },
       {
         id: 1,
-        data_inici: subDays(endOfMonth(new Date()), 3),
-        data_final: addDays(endOfMonth(new Date()), 3),
+        cssClass: "0;2",
+        start: subDays(endOfMonth(new Date()), 3),
+        end: addDays(endOfMonth(new Date()), 3),
         color: this.colors.blue,
-        titol: 'A long event that spans 2 months',
-        id_llistat_tasques: 2,
+        title: 'A long event that spans 2 months',
       },
       {
         id: 2,
-        data_inici: addHours(startOfDay(new Date()), 2),
-        data_final: addHours(new Date(), 2),
+        cssClass: "0;0",
+        start: addHours(startOfDay(new Date()), 2),
+        end: addHours(new Date(), 2),
         color: this.colors.blue,
-        titol: 'A draggable and resizable event',
-        id_llistat_tasques: 0,
+        title: 'A draggable and resizable event',
       },
       {
         id: 3,
-        data_inici: subDays(startOfWeek(new Date()), 1),
-        data_final: addDays(startOfWeek(new Date()), 1),
+        cssClass: "0;0",
+        start: subDays(startOfWeek(new Date()), 1),
+        end: addDays(startOfWeek(new Date()), 1),
         color: this.colors.yellow,
-        titol: 'A long event that spans 2 months',
-        id_llistat_tasques: 0,
+        title: 'A long event that spans 2 months',
       },
     ];
 
     for (let i = 0; i < tasques_usuari.length; i++) {
-/*       this.fbService.crearEstructuraColeccio(
+      this.fbService.crearEstructuraColeccio(
         'users/' + usuari + '/tasks',
         tasques_usuari[i]
-      ); */
+      );
     }
   }
 }
-
-// openDialog(item) {
-//   const dialogConfig = new MatDialogConfig();
-
-//   this.formGroup.setValue(item);
-//   // dialogConfig.disableClose = true;
-//   dialogConfig.autoFocus = true;
-
-//   dialogConfig.data = this.formGroup;
-
-//   const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
-
-//   dialogRef.afterClosed().subscribe((data) => console.log(data));
-// }
