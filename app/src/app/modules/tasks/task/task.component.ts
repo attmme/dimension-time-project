@@ -129,42 +129,56 @@ export class TaskComponent implements OnInit {
     },
   ];
 
-  test(evento) {
-    let inici = new Date(this.formulariCrear.value.dataInici);
-    let final = new Date(this.formulariCrear.value.dataFinal);
+  revisarDates(accio) {
 
+    console.log("accio: ", accio);
+    let inici: Date;
+    let final: Date;
+
+    switch (accio) {
+      case 'Crear':
+        inici = new Date(this.formulariCrear.value.dataInici);
+        final = new Date(this.formulariCrear.value.dataFinal);
+        break;
+      case 'Editar':
+        inici = new Date(this.formulariEditar.value.dataInici);
+        final = new Date(this.formulariEditar.value.dataFinal);
+        break;
+    }
+
+    console.log("inici: ", inici);
+    console.log("final: ", final);
 
     let sonIguals = this.datesIguals(inici, final);
     this.bloqueig_boto = !sonIguals;
-    console.log('son iguals?: ', sonIguals);
-
-    //console.log( ((year1+month1+day1) != NaN) );
   }
 
   datesIguals(data1, data2): boolean {
-    let month1 = data1.getUTCMonth() + 1; //months from 1-12
-    let day1 = data1.getUTCDate();
-    let year1 = data1.getUTCFullYear();
 
-    let hora1 = data1.getUTCHours();
-    let minuts1 = data1.getUTCMinutes();
+    let hora1 = data1.getHours();
+    hora1 = (hora1 == 24? 0 : hora1 );
+    let minuts1 = data1.getMinutes();
+    let day1 = data1.getDate();
+    let month1 = data1.getMonth() + 1; //months from 1-12
+    let year1 = data1.getFullYear();
 
-    let month2 = data2.getUTCMonth() + 1; //months from 1-12
-    let day2 = data2.getUTCDate();
-    let year2 = data2.getUTCFullYear();
+    let hora2 = data2.getHours();
+    hora2 = (hora2 == 24? 0 : hora2 );
+    let minuts2 = data2.getMinutes();
+    let day2 = data2.getDate();
+    let month2 = data2.getMonth() + 1; //months from 1-12
+    let year2 = data2.getFullYear();
 
-    let hora2 = data2.getUTCHours();
-    let minuts2 = data2.getUTCMinutes();
-
-    let newdate1 = year1 + '/' + month1 + '/' + day1;
-    let newdate2 = year2 + '/' + month2 + '/' + day2;
+    let newdate1 = month1 + '/' + day1  + '/' +  year1;
+    let newdate2 = month2 + '/' + day2  + '/' +  year2;
 
     let esNumero = year1 + month1 + day1 > 0;
     let datesIguals = newdate1 === newdate2;
     let horesCorrectes = hora2 >= hora1;
-    let minutsCorrectes = minuts2 >= minuts1;
+    let minutsCorrectes = (minuts2 >= minuts1);
+    let horaRepetida = ( hora2 == hora1 &&  minuts2 == minuts1);
 
-    return datesIguals && esNumero && horesCorrectes && minutsCorrectes;
+    return datesIguals && esNumero && horesCorrectes && minutsCorrectes && !horaRepetida;
   }
 
   // Inici APP

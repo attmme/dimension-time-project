@@ -123,8 +123,8 @@
           [owlDateTime]="ds"
           [owlDateTimeTrigger]="ds"
           formControlName="dataInici"
-          (ngModelChange)="refresh.next()"
           class="form-control"
+          (ngModelChange)="revisarDates('Editar')"
         />
         <owl-date-time #ds></owl-date-time>
       </div>
@@ -137,9 +137,8 @@
           [owlDateTime]="de"
           [owlDateTimeTrigger]="de"
           formControlName="dataFinal"
-          (ngModelChange)="refresh.next()"
           class="form-control"
-          value="12/10/2020, 1:04 AM"
+          (ngModelChange)="revisarDates('Editar')"
         />
         <owl-date-time #de></owl-date-time>
       </div>
@@ -184,6 +183,7 @@
         type="submit"
         (click)="close()"
         (click)="guardar_tasca()"
+        [disabled]="bloqueig_boto"
       >
         Save
       </button>
@@ -216,7 +216,7 @@
           [owlDateTimeTrigger]="ds"
           formControlName="dataInici"
           class="form-control"
-          (ngModelChange)="test($event)"
+          (ngModelChange)="revisarDates('Crear')"
         />
         <owl-date-time  #ds></owl-date-time>
       </div>
@@ -228,7 +228,7 @@
           [owlDateTimeTrigger]="de"
           formControlName="dataFinal"
           class="form-control"
-          (ngModelChange)="test($event)"
+          (ngModelChange)="revisarDates('Crear')"
         />
         <owl-date-time #de></owl-date-time>
       </div>
