@@ -34,7 +34,7 @@ export class RegisterFormComponent implements OnInit {
       password_check_form: ['', [Validators.required, Validators.minLength(6)]],
     }, {
       validator: this.passwords_coincideixen('password_form', 'password_check_form')
-  });
+    });
 
   }
   get funcio_formulari() { // mirem el tema d'errors en password/email, tamanys, etc
@@ -58,24 +58,24 @@ export class RegisterFormComponent implements OnInit {
     } else {
       return;
     }
-    //this.trucazo_router.navigateByUrl('/tasks'); // trucazo
-    // this.submitted = true;
+    this.trucazo_router.navigateByUrl('/login'); // trucazo
+    this.submitted = true;
   }
 
 
   passwords_coincideixen(controlName: string, matchingControlName: string) {
     return (formGroup: FormGroup) => {
-        const control = formGroup.controls[controlName];
-        const matchingControl = formGroup.controls[matchingControlName];
+      const control = formGroup.controls[controlName];
+      const matchingControl = formGroup.controls[matchingControlName];
 
-        if (control.value !== matchingControl.value) {
-            matchingControl.setErrors({ diferents: true });
-        }
-        // else {
-            // matchingControl.setErrors(null);
-        // }
+      if (control.value !== matchingControl.value) {
+        matchingControl.setErrors({ diferents: true });
+      }
+      // else {
+      // matchingControl.setErrors(null);
+      // }
     }
-}
+  }
 
 
 }

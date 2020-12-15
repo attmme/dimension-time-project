@@ -1,4 +1,28 @@
+.modal-body {
+  .grup {
+    display: flex;
+    width: 100%;
+    margin-top: 15px;
 
+    .task {
+      margin-right: 25px;
+    }
+  }
+
+  .start {
+    margin-bottom: 15px;
+  }
+}
+
+
+.modal-title {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
+
+/* 
 h3 {
   margin: 0 0 10px;
 }
@@ -50,9 +74,7 @@ ul {
         margin-top: 1em;
         margin-left: 1em;
 
-        /*
-        border: 1px solid red;
-          */
+
       }
 
       #card_peu {
@@ -77,3 +99,4 @@ ul {
     }
   }
 }
+ */

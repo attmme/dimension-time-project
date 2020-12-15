@@ -61,7 +61,7 @@
 <!-- El modal per a editar una tasca -->
 <ng-template #modalEditar let-close="close">
   <!-- codi comentat:  (ngSubmit)="submitEditarTasca(buttonType)" -->
-  <form [formGroup]="formulariEditar" >
+  <form [formGroup]="formulariEditar">
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Edit task</h5>
@@ -72,37 +72,40 @@
 
     <!-- inputs editar tasca  -->
     <div class="modal-body">
-      <div>
-        Task:
-        <select name="tasca" formControlName="tasca">
-          <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
-            {{ tasca.nom }}
-          </option>
-        </select>
-      </div>
-
-      <div>
-        Color:
-        <select name="colorPrimari" formControlName="colorPrimari">
-          <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
-            {{ color.key }}
-          </option>
-        </select>
-      </div>
-      <div>
+      <div class="start">
         Start date:
         <!-- [selectMode]="'rangeFrom'"  -->
-        <input [(ngModel)]="dataIni" [owlDateTime]="ds" [owlDateTimeTrigger]="ds"
-          formControlName="dataInici" (ngModelChange)="refresh.next()" class="form-control">
+        <input [(ngModel)]="dataIni" [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
+          (ngModelChange)="refresh.next()" class="form-control">
         <owl-date-time #ds></owl-date-time>
       </div>
 
-      <div>
+      <div class="end">
         End date:
         <!-- [selectMode]="'rangeTo'" -->
-        <input [(ngModel)]="dataFi"  [owlDateTime]="de" [owlDateTimeTrigger]="de"
-          formControlName="dataFinal" (ngModelChange)="refresh.next()" class="form-control" value="12/10/2020, 1:04 AM">
+        <input [(ngModel)]="dataFi" [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal"
+          (ngModelChange)="refresh.next()" class="form-control" value="12/10/2020, 1:04 AM">
         <owl-date-time #de></owl-date-time>
+      </div>
+
+      <div class="grup">
+        <div class="task">
+          Task:
+          <select name="tasca" formControlName="tasca">
+            <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
+              {{ tasca.nom }}
+            </option>
+          </select>
+        </div>
+
+        <div class="color">
+          Color:
+          <select name="colorPrimari" formControlName="colorPrimari">
+            <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
+              {{ color.key }}
+            </option>
+          </select>
+        </div>
       </div>
 
     </div>
@@ -113,7 +116,7 @@
         Delete
       </button>
 
-      <button class="btn btn-primary" type="submit" (click)="close()"  (click)="guardar_tasca()">
+      <button class="btn btn-primary" type="submit" (click)="close()" (click)="guardar_tasca()">
         Save
       </button>
 
@@ -137,35 +140,38 @@
 
     <!-- inputs crear tasca  -->
     <div class="modal-body">
-      <div>
 
-        <div>
-          Start-date:
-          <input [(ngModel)]="diaClicat" [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici" class="form-control">
-          <owl-date-time #ds></owl-date-time>
-        </div>
-
-        <div>
-          End-date:
-          <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" class="form-control">
-          <owl-date-time #de></owl-date-time>
-        </div>
-
-        Task:
-        <select name="tasca" formControlName="tasca">
-          <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
-            {{ tasca.nom }}
-          </option>
-        </select>
+      <div class="start">
+        Start-date:
+        <input [(ngModel)]="diaClicat" [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
+          class="form-control">
+        <owl-date-time #ds></owl-date-time>
       </div>
 
-      <div>
-        Color:
-        <select name="colorPrimari" formControlName="colorPrimari">
-          <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
-            {{ color.key }}
-          </option>
-        </select>
+      <div class="end">
+        End-date:
+        <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" class="form-control">
+        <owl-date-time #de></owl-date-time>
+      </div>
+
+      <div class="grup">
+        <div class="task">
+          Task:
+          <select name="tasca" formControlName="tasca">
+            <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
+              {{ tasca.nom }}
+            </option>
+          </select>
+        </div>
+  
+        <div class="color">
+          Color:
+          <select name="colorPrimari" formControlName="colorPrimari">
+            <option *ngFor="let color of colors | keyvalue" value="{{ color.key }}">
+              {{ color.key }}
+            </option>
+          </select>
+        </div>
       </div>
 
     </div>

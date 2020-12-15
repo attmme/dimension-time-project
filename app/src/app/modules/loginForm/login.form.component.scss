@@ -4,7 +4,7 @@
 
   .mat-card {
     width: 15em;
-    height: 25em;
+    height: 30em;
     border-radius: 1em;
 
     .mat-card-title {
@@ -28,6 +28,7 @@
         height: 90%;
 
         button {
+          margin-bottom: 20px;
           width: 10em;
           font-size: 19px;
         }
