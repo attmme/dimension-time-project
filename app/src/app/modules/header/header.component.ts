@@ -66,6 +66,9 @@ export class HeaderComponent implements OnInit {
   }
 
   agafarTasquesUsuariDB() {
+
+    this.llista = [];
+
     this.fbService
       .readColl(`users/${this.service.getToken()}/tasks`)
       .then((data) => {

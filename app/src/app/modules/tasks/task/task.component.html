@@ -9,7 +9,7 @@
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
+        (viewDateChange)="tancarVistaMes()"
       >
         Previous
       </div>
@@ -25,7 +25,7 @@
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="viewDate"
-        (viewDateChange)="closeOpenMonthViewDay()"
+        (viewDateChange)="tancarVistaMes()"
       >
         Next
       </div>
@@ -38,21 +38,21 @@
     <div class="btn-group">
       <div
         class="btn btn-primary"
-        (click)="setView(CalendarView.Month)"
+        (click)="donarVista(CalendarView.Month)"
         [class.active]="view === CalendarView.Month"
       >
         Month
       </div>
       <div
         class="btn btn-primary"
-        (click)="setView(CalendarView.Week)"
+        (click)="donarVista(CalendarView.Week)"
         [class.active]="view === CalendarView.Week"
       >
         Week
       </div>
       <div
         class="btn btn-primary"
-        (click)="setView(CalendarView.Day)"
+        (click)="donarVista(CalendarView.Day)"
         [class.active]="view === CalendarView.Day"
       >
         Day
@@ -70,7 +70,7 @@
   <mwl-calendar-month-view
     *ngSwitchCase="CalendarView.Month"
     [viewDate]="viewDate"
-    [events]="events"
+    [events]="tasques_calendari"
     [refresh]="refresh"
     (dayClicked)="dayClicked($event.day)"
     (eventClicked)="handleEvent('Clicked', $event.event)"
@@ -82,7 +82,7 @@
   <mwl-calendar-week-view
     *ngSwitchCase="CalendarView.Week"
     [viewDate]="viewDate"
-    [events]="events"
+    [events]="tasques_calendari"
     [refresh]="refresh"
     (eventClicked)="handleEvent('Clicked', $event.event)"
     (eventTimesChanged)="eventTimesChanged($event)"
@@ -93,7 +93,7 @@
   <mwl-calendar-day-view
     *ngSwitchCase="CalendarView.Day"
     [viewDate]="viewDate"
-    [events]="events"
+    [events]="tasques_calendari"
     [refresh]="refresh"
     (eventClicked)="handleEvent('Clicked', $event.event)"
     (eventTimesChanged)="eventTimesChanged($event)"
@@ -147,7 +147,7 @@
         <div class="task">
           Task:
           <select name="tasca" formControlName="tasca">
-            <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
+            <option *ngFor="let tasca of tasques_trello" value="{{ tasca.id }}">
               {{ tasca.nom }}
             </option>
           </select>
@@ -237,7 +237,7 @@
         <div class="task">
           Task:
           <select name="tasca" formControlName="tasca">
-            <option *ngFor="let tasca of tasques" value="{{ tasca.id }}">
+            <option *ngFor="let tasca of tasques_trello" value="{{ tasca.id }}">
               {{ tasca.nom }}
             </option>
           </select>

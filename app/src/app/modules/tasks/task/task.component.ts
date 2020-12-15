@@ -42,6 +42,10 @@ import { provideRoutes } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskComponent implements OnInit {
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  @ViewChild('modalCrear', { static: true }) modalCrear: TemplateRef<any>;
+  @ViewChild('modalEditar', { static: true }) modalEditar: TemplateRef<any>;
+
   // Constructor
   constructor(
     private modal: NgbModal,
@@ -49,6 +53,8 @@ export class TaskComponent implements OnInit {
     private fbService: FirebaseService,
     private auth: AuthService
   ) {}
+
+  // variables
 
   // Colors del picker
   colors: any = {
@@ -66,11 +72,6 @@ export class TaskComponent implements OnInit {
     },
   };
 
-  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
-  @ViewChild('modalCrear', { static: true }) modalCrear: TemplateRef<any>;
-  @ViewChild('modalEditar', { static: true }) modalEditar: TemplateRef<any>;
-
-  // variables
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
@@ -81,20 +82,14 @@ export class TaskComponent implements OnInit {
   editar_borrar: number;
   buttonType: string;
   bloqueig_boto: boolean;
+  date_inicial_modal_crear: Date;
+  tasques_calendari: CalendarEvent[] = [];
+  tasques_trello = [];
 
-  ////////////////////////////// Jesucristo
-  // Variables edit
   diaClicat = new Date();
   dataIni = new Date();
   dataFi = new Date();
   dataID: string | number;
-  //////////////////////////////
-
-  //a millorar
-  date_inicial_modal_crear: Date;
-
-  events: CalendarEvent[] = [];
-  tasques = [];
 
   form: FormGroup = new FormGroup({
     tasca: new FormControl(''),
@@ -123,11 +118,37 @@ export class TaskComponent implements OnInit {
       label: '<i class="fas fa-fw fa-trash-alt"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
+        this.tasques_calendari = this.tasques_calendari.filter((iEvent) => iEvent !== event);
         this.handleEvent('Deleted', event);
       },
     },
   ];
+
+  ngOnInit(): void {
+    // Llegeix les tasques de trello al carregar l'app
+    this.fbService.readColl('tasks').then((data) => {
+      data.map((el, id) => this.tasques_trello.push({ id: id, nom: el['nom'] }));
+    });
+
+    this.agafarTasquesDB(); // Agafa les dades de la DB i les passa a la web
+
+    this.formulariCrear = this.formBuilder.group({
+      tasca: ['', [Validators.required]],
+      colorPrimari: ['', [Validators.required]],
+      colorSecundari: ['', [Validators.required]],
+      dataInici: ['', [Validators.required]],
+      dataFinal: ['', [Validators.required]],
+    });
+
+    this.formulariEditar = this.formBuilder.group({
+      tasca: ['', [Validators.required]],
+      colorPrimari: ['', [Validators.required]],
+      colorSecundari: ['', [Validators.required]],
+      dataInici: ['', [Validators.required]],
+      dataFinal: ['', [Validators.required]],
+      id_formulari: [''],
+    });
+  }
 
   revisarDates(accio) {
     let inici: Date;
@@ -181,46 +202,17 @@ export class TaskComponent implements OnInit {
     );
   }
 
-  // Inici APP
-  ngOnInit(): void {
-    // Llegeix les tasques de trello al carregar l'app
-    this.fbService.readColl('tasks').then((data) => {
-      data.map((el, id) => this.tasques.push({ id: id, nom: el['nom'] }));
-    });
-
-    // Agafa les dades de la DB i les passa a la web
-    this.agafarTasquesDB();
-
-    this.formulariCrear = this.formBuilder.group({
-      tasca: ['', [Validators.required]],
-      colorPrimari: ['', [Validators.required]],
-      colorSecundari: ['', [Validators.required]],
-      dataInici: ['', [Validators.required]],
-      dataFinal: ['', [Validators.required]],
-    });
-
-    this.formulariEditar = this.formBuilder.group({
-      tasca: ['', [Validators.required]],
-      colorPrimari: ['', [Validators.required]],
-      colorSecundari: ['', [Validators.required]],
-      dataInici: ['', [Validators.required]],
-      dataFinal: ['', [Validators.required]],
-      id_formulari: [''],
-    });
-  }
-
   // Agafa les dades de la DB i les passa a la web
   agafarTasquesDB() {
     this.fbService
       .readColl(`users/${this.auth.getToken()}/tasks`)
       .then((data) => {
         data.map((element) => {
-
-          this.events = [
-            ...this.events,
+          this.tasques_calendari = [
+            ...this.tasques_calendari,
             {
               id: element['nomDocument'],
-              cssClass: `${element['id']};${element['id_llistat_tasques']}`, // id usuari; id llistat tasques
+              cssClass: `${element['id']};${element['id_llistat_tasques']}`,
               start: new Date(element['data_inici'].seconds * 1000),
               end: new Date(element['data_final'].seconds * 1000),
               title: element['titol'],
@@ -250,7 +242,7 @@ export class TaskComponent implements OnInit {
     newStart,
     newEnd,
   }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map((iEvent) => {
+    this.tasques_calendari = this.tasques_calendari.map((iEvent) => {
       if (iEvent === event) {
         return {
           ...event,
@@ -265,22 +257,20 @@ export class TaskComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    /////////////// Jesucristo 2.0
     this.dataIni = event.start;
     this.dataFi = event.end;
     this.dataID = this.modalData.event.id;
-    ///////////////
 
     if (action == 'Clicked') {
       this.modal.open(this.modalEditar, { size: 'lg' });
     }
   }
 
-  setView(view: CalendarView) {
+  donarVista(view: CalendarView) {
     this.view = view;
   }
 
-  closeOpenMonthViewDay() {
+  tancarVistaMes() {
     this.activeDayIsOpen = false;
   }
 
@@ -291,21 +281,19 @@ export class TaskComponent implements OnInit {
     this.fbService.delete(idUsuari, nomDocumentBorrar);
 
     // borrar del array
-    let index_elem_borrar = this.events
+    let index_elem_borrar = this.tasques_calendari
       .map((item) => item.id)
       .indexOf(nomDocumentBorrar);
-    this.events.splice(index_elem_borrar, 1);
+    this.tasques_calendari.splice(index_elem_borrar, 1);
 
     this.refresh.next();
   }
 
-  // Al guardar un edit d'una tasca
   submitEdit() {
     let _color = this.colors[this.formulariEditar.value.colorPrimari];
     let paquet_de_dades = `${0};${this.formulariEditar.value.tasca}`;
 
     let evento = {
-      //id: aqui ha d anar el UUID de la DB, // nova id = tamany array ( final array )
       cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
       start: this.formulariEditar.value.dataInici,
       end: this.formulariEditar.value.dataFinal,
@@ -327,7 +315,7 @@ export class TaskComponent implements OnInit {
     this.fbService // Crear una amb la nova
       .crearEstructuraColeccio('users/' + idUsuari + '/tasks', evento)
       .then(() => {
-        this.events = [];
+        this.tasques_calendari = [];
         this.agafarTasquesDB();
       });
   }
@@ -344,19 +332,19 @@ export class TaskComponent implements OnInit {
       color: _color,
     };
 
-    this.fbService.crearEstructuraColeccio(
-      'users/' + this.auth.getToken() + '/tasks',
-      tasca_a_crear
-    ).then(
-      ()=>{
-        this.events = [];
+    this.fbService
+      .crearEstructuraColeccio(
+        'users/' + this.auth.getToken() + '/tasks',
+        tasca_a_crear
+      )
+      .then(() => {
+        this.tasques_calendari = [];
         this.agafarTasquesDB();
-      }
-    );
+      });
   }
 
   donarTasca(id): string {
-    let nom_tasca = this.tasques.find((element) => element.id == id);
+    let nom_tasca = this.tasques_trello.find((element) => element.id == id);
     return nom_tasca.nom;
   }
 }
