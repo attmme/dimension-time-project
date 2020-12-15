@@ -27,7 +27,6 @@ export class TaskComponent implements OnInit {
     private auth: AuthService
   ) { }
 
-  //public dataActual = new Date(2018, 1, 12, 10, 30);
 
   // Colors del picker
   colors: any = {
@@ -178,6 +177,13 @@ export class TaskComponent implements OnInit {
     this.handleEvent('Dropped or resized', event);
   }
 
+  ///////////////////////////////
+  public selectedMoments = [
+    new Date(2018, 1, 12, 10, 30),
+    new Date(2018, 3, 21, 20, 30)
+  ];
+  ///////////////////////////////
+
   handleEvent(action: string, event: CalendarEvent): void {
 
     this.modalData = { event, action };
@@ -190,8 +196,6 @@ export class TaskComponent implements OnInit {
 
       const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
 
-      //console.log(event.start)
-      this.formulariCrear.value.dataInici = "asd";
       //puntero.componentInstance.dataFinal = event.end;
     }
   }

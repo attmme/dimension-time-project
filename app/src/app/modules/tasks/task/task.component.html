@@ -90,15 +90,15 @@
       <div>
         Start date:
         <!-- "dataInici" -->
-        <input [owlDateTime]="ds" [owlDateTimeTrigger]="ds" formControlName="dataInici"
-          (ngModelChange)="refresh.next()" class="form-control">
+        <input [(ngModel)]="selectedMoments" [selectMode]="'rangeFrom'" [owlDateTime]="ds" [owlDateTimeTrigger]="ds"
+          formControlName="dataInici" (ngModelChange)="refresh.next()" class="form-control">
         <owl-date-time #ds></owl-date-time>
       </div>
 
       <div>
         End date:
-        <input [owlDateTime]="de" [owlDateTimeTrigger]="de" formControlName="dataFinal" (ngModelChange)="refresh.next()"
-          class="form-control" value="12/10/2020, 1:04 AM">
+        <input [(ngModel)]="selectedMoments" [selectMode]="'rangeTo'" [owlDateTime]="de" [owlDateTimeTrigger]="de"
+          formControlName="dataFinal" (ngModelChange)="refresh.next()" class="form-control" value="12/10/2020, 1:04 AM">
         <owl-date-time #de></owl-date-time>
       </div>
 
