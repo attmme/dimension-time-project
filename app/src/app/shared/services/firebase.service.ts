@@ -32,7 +32,6 @@ export class FirebaseService {
 
   // Guardar time-task
   crearEstructuraColeccio(ruta: string, dades: any) {
-
     let collection = this.firestore.collection(ruta);
     return (
       // Agafar l'objecte i canviar aquí el contingut
@@ -54,6 +53,15 @@ export class FirebaseService {
       .get()
       .toPromise()
       .then((data) => data.docs.map((el) => el.data()));
+  }
+
+  // Llegir document
+  readDoc(name, id) {
+    let collection = this.firestore.collection(name);
+
+    // this.firestore.collection(`users/${id_usuari}/tasks`).doc(id).delete();
+
+    return collection.doc(id).get().toPromise();
   }
 
   llegir_tasques_usuari(id_usuari) {
@@ -79,8 +87,11 @@ export class FirebaseService {
   }
 
   // Eliminar document
-  delete(id_usuari:string, id: string){
-     return this.firestore.collection(`users/${id_usuari}/tasks`).doc(id).delete();
+  delete(id_usuari: string, id: string) {
+    return this.firestore
+      .collection(`users/${id_usuari}/tasks`)
+      .doc(id)
+      .delete();
   }
 
   // Login

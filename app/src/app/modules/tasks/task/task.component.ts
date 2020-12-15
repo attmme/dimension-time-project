@@ -219,8 +219,7 @@ export class TaskComponent implements OnInit {
     ///////////////
 
     if (action == 'Clicked') {
-      let dades_parseadas = event.cssClass.split(';');
-      const puntero = this.modal.open(this.modalEditar, { size: 'lg' });
+      this.modal.open(this.modalEditar, { size: 'lg' });
     }
   }
 

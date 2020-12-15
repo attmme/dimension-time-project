@@ -1,23 +1,130 @@
 <mat-toolbar color="primary">
-  <div *ngIf=!isLogged()>
+  <div *ngIf="!isLogged()">
     <span>Register</span>
   </div>
 
-  <div *ngIf=isLogged()>
+  <div *ngIf="isLogged()">
     <span>Tasks</span>
   </div>
 
   <div id="botons_laterals">
-<!--     <button *ngIf=isLogged() mat-raised-button (click)="(clickResumen())" color="primary">
-      Resumen {{fill_dada}}
-    </button> -->
+    <button
+      *ngIf="isLogged()"
+      mat-raised-button
+      (click)="clickPersonal()"
+      color="primary"
+    >
+      Personal
+    </button>
 
-    <button *ngIf=isLogged() mat-raised-button (click)="(clickLogout())" color="primary">
+    <button
+      *ngIf="isLogged()"
+      mat-raised-button
+      (click)="clickResumen()"
+      color="primary"
+    >
+      Resumen
+    </button>
+
+    <button
+      *ngIf="isLogged()"
+      mat-raised-button
+      (click)="clickLogout()"
+      color="primary"
+    >
       Logout
     </button>
 
-    <button *ngIf=!isLogged() mat-raised-button (click)="(clickLogin())" color="primary">
+    <button
+      *ngIf="!isLogged()"
+      mat-raised-button
+      (click)="clickLogin()"
+      color="primary"
+    >
       Login
     </button>
   </div>
 </mat-toolbar>
+
+<!-- Template resum tasques comuns -->
+<ng-template #templateResumen let-close="close">
+  <!-- codi comentat:  (ngSubmit)="submitEditarTasca(buttonType)" -->
+  <!-- Títol -->
+  <div class="modal-header">
+    <h5 class="modal-title">Task list users</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <!-- llistat coses -->
+  <div class="modal-llistat">
+    <ul>
+      <li *ngFor="let list of llista">
+        <div>
+          <h1>Usuari:</h1>
+          <p>{{ list.usuari }}</p>
+        </div>
+        <div>
+          <h1>Tasca:</h1>
+          <p>{{ list.tasca }}</p>
+        </div>
+        <div>
+          <h1>Hores:</h1>
+          <p>{{ list.hores }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+
+  <!-- Botons -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      Close
+    </button>
+  </div>
+</ng-template>
+
+
+<!-- Template usuari -->
+<ng-template #templatePersonal let-close="close">
+  <!-- Títol -->
+  <div class="modal-header">
+    <h5 class="modal-title">Task list usuari {{nomUsuari}}</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <!-- llistat coses -->
+  <div class="modal-llistat">
+    <ul>
+      <li *ngFor="let list of llista">
+        <div>
+          <h1>Usuari:</h1>
+          <p>{{ list.usuari }}</p>
+        </div>
+        <div>
+          <h1>Tasca:</h1>
+          <p>{{ list.titol }}</p>
+        </div>
+        <div>
+          <h1>Hora Inici:</h1>
+          <p>{{ list.data_inici }}</p>
+        </div>
+        <div>
+          <h1>Hora Final:</h1>
+          <p>{{ list.data_final }}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Botons -->
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      Close
+    </button>
+  </div>
+</ng-template>

@@ -21,4 +21,8 @@ export class AuthService {
   public getToken() {
     return localStorage.getItem('userId');
   }
+
+  public getUserName() {
+    return this.fbService.readDoc("users", this.getToken());
+  }
 }
