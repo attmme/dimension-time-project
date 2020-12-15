@@ -130,8 +130,6 @@ export class TaskComponent implements OnInit {
   ];
 
   revisarDates(accio) {
-
-    console.log("accio: ", accio);
     let inici: Date;
     let final: Date;
 
@@ -146,39 +144,41 @@ export class TaskComponent implements OnInit {
         break;
     }
 
-    console.log("inici: ", inici);
-    console.log("final: ", final);
-
     let sonIguals = this.datesIguals(inici, final);
     this.bloqueig_boto = !sonIguals;
   }
 
   datesIguals(data1, data2): boolean {
-
     let hora1 = data1.getHours();
-    hora1 = (hora1 == 24? 0 : hora1 );
+    hora1 = hora1 == 24 ? 0 : hora1;
     let minuts1 = data1.getMinutes();
     let day1 = data1.getDate();
     let month1 = data1.getMonth() + 1; //months from 1-12
     let year1 = data1.getFullYear();
 
     let hora2 = data2.getHours();
-    hora2 = (hora2 == 24? 0 : hora2 );
+    hora2 = hora2 == 24 ? 0 : hora2;
     let minuts2 = data2.getMinutes();
     let day2 = data2.getDate();
     let month2 = data2.getMonth() + 1; //months from 1-12
     let year2 = data2.getFullYear();
 
-    let newdate1 = month1 + '/' + day1  + '/' +  year1;
-    let newdate2 = month2 + '/' + day2  + '/' +  year2;
+    let newdate1 = month1 + '/' + day1 + '/' + year1;
+    let newdate2 = month2 + '/' + day2 + '/' + year2;
 
     let esNumero = year1 + month1 + day1 > 0;
     let datesIguals = newdate1 === newdate2;
     let horesCorrectes = hora2 >= hora1;
-    let minutsCorrectes = (minuts2 >= minuts1);
-    let horaRepetida = ( hora2 == hora1 &&  minuts2 == minuts1);
+    let minutsCorrectes = minuts2 >= minuts1;
+    let horaRepetida = hora2 == hora1 && minuts2 == minuts1;
 
-    return datesIguals && esNumero && horesCorrectes && minutsCorrectes && !horaRepetida;
+    return (
+      datesIguals &&
+      esNumero &&
+      horesCorrectes &&
+      minutsCorrectes &&
+      !horaRepetida
+    );
   }
 
   // Inici APP
@@ -215,10 +215,11 @@ export class TaskComponent implements OnInit {
       .readColl(`users/${this.auth.getToken()}/tasks`)
       .then((data) => {
         data.map((element) => {
+
           this.events = [
             ...this.events,
             {
-              id: element['id'],
+              id: element['nomDocument'],
               cssClass: `${element['id']};${element['id_llistat_tasques']}`, // id usuari; id llistat tasques
               start: new Date(element['data_inici'].seconds * 1000),
               end: new Date(element['data_final'].seconds * 1000),
@@ -264,7 +265,6 @@ export class TaskComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-
     /////////////// Jesucristo 2.0
     this.dataIni = event.start;
     this.dataFi = event.end;
@@ -276,10 +276,6 @@ export class TaskComponent implements OnInit {
     }
   }
 
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter((event) => event !== eventToDelete);
-  }
-
   setView(view: CalendarView) {
     this.view = view;
   }
@@ -288,26 +284,28 @@ export class TaskComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
-  eliminar_tasca() {
-    let idDocumentBorrar = this.dataID.toString(); // Borrar actual de la bdd
+  eliminarTasca() {
+    // borrar del firebase
+    let nomDocumentBorrar = this.dataID.toString(); // Borrar actual de la bdd
     let idUsuari = this.auth.getToken();
-    this.fbService.delete(idUsuari, idDocumentBorrar);
+    this.fbService.delete(idUsuari, nomDocumentBorrar);
 
+    // borrar del array
     let index_elem_borrar = this.events
       .map((item) => item.id)
-      .indexOf(idDocumentBorrar);
+      .indexOf(nomDocumentBorrar);
     this.events.splice(index_elem_borrar, 1);
 
     this.refresh.next();
   }
 
   // Al guardar un edit d'una tasca
-  guardar_tasca() {
+  submitEdit() {
     let _color = this.colors[this.formulariEditar.value.colorPrimari];
     let paquet_de_dades = `${0};${this.formulariEditar.value.tasca}`;
 
     let evento = {
-      id: this.events.length, // nova id = tamany array ( final array )
+      //id: aqui ha d anar el UUID de la DB, // nova id = tamany array ( final array )
       cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
       start: this.formulariEditar.value.dataInici,
       end: this.formulariEditar.value.dataFinal,
@@ -322,7 +320,7 @@ export class TaskComponent implements OnInit {
       },
     };
 
-    this.eliminar_tasca();
+    this.eliminarTasca();
 
     let idUsuari = this.auth.getToken();
 
@@ -337,80 +335,28 @@ export class TaskComponent implements OnInit {
   crearTasca() {
     let _color = this.colors[this.formulariCrear.value.colorPrimari];
     let paquet_de_dades = `${0};${this.formulariCrear.value.tasca}`;
-    this.events = [
-      ...this.events,
-      {
-        id: this.events.length, // nova id = tamany array ( final array )
-        cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
-        start: this.formulariCrear.value.dataInici,
-        end: this.formulariCrear.value.dataFinal,
-        title: this.donarTasca(this.formulariCrear.value.tasca),
-        color: _color,
-        actions: this.actions,
-        allDay: false,
-        draggable: false,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
+
+    let tasca_a_crear = {
+      cssClass: paquet_de_dades, // id usuari, temporal, canviar a la real
+      start: this.formulariCrear.value.dataInici,
+      end: this.formulariCrear.value.dataFinal,
+      title: this.donarTasca(this.formulariCrear.value.tasca),
+      color: _color,
+    };
 
     this.fbService.crearEstructuraColeccio(
       'users/' + this.auth.getToken() + '/tasks',
-      this.events[this.events.length - 1]
+      tasca_a_crear
+    ).then(
+      ()=>{
+        this.events = [];
+        this.agafarTasquesDB();
+      }
     );
   }
 
   donarTasca(id): string {
     let nom_tasca = this.tasques.find((element) => element.id == id);
     return nom_tasca.nom;
-  }
-
-  // Omplir BDD amb valors per testing
-  crearDBTest() {
-    let usuari = this.auth.getToken();
-
-    let tasques_usuari = [
-      {
-        id: 0,
-        cssClass: '0;1',
-        start: subDays(startOfDay(new Date()), 1),
-        end: addDays(new Date(), 1),
-        color: this.colors.red,
-        title: 'A 3 day event',
-      },
-      {
-        id: 1,
-        cssClass: '0;2',
-        start: subDays(endOfMonth(new Date()), 3),
-        end: addDays(endOfMonth(new Date()), 3),
-        color: this.colors.blue,
-        title: 'A long event that spans 2 months',
-      },
-      {
-        id: 2,
-        cssClass: '0;0',
-        start: addHours(startOfDay(new Date()), 2),
-        end: addHours(new Date(), 2),
-        color: this.colors.blue,
-        title: 'A draggable and resizable event',
-      },
-      {
-        id: 3,
-        cssClass: '0;0',
-        start: subDays(startOfWeek(new Date()), 1),
-        end: addDays(startOfWeek(new Date()), 1),
-        color: this.colors.yellow,
-        title: 'A long event that spans 2 months',
-      },
-    ];
-
-    for (let i = 0; i < tasques_usuari.length; i++) {
-      this.fbService.crearEstructuraColeccio(
-        'users/' + usuari + '/tasks',
-        tasques_usuari[i]
-      );
-    }
   }
 }
