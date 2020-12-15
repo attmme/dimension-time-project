@@ -78,6 +78,8 @@ export class TaskComponent implements OnInit {
   activeDayIsOpen: boolean = false;
   formulariCrear: FormGroup;
   formulariEditar: FormGroup;
+  editar_borrar: number;
+  buttonType: string;
 
   ////////////////////////////// Jesucristo
   // Variables edit
@@ -171,7 +173,7 @@ export class TaskComponent implements OnInit {
               color: element['color'],
               actions: this.actions,
               allDay: false,
-              draggable: true,
+              draggable: false,
               resizable: {
                 beforeStart: true,
                 afterEnd: true,
@@ -234,8 +236,21 @@ export class TaskComponent implements OnInit {
     this.activeDayIsOpen = false;
   }
 
+  eliminar_tasca() {
+    let idDocumentBorrar = this.dataID.toString(); // Borrar actual de la bdd
+    let idUsuari = this.auth.getToken();
+    this.fbService.delete(idUsuari, idDocumentBorrar);
+
+    let index_elem_borrar = this.events
+      .map((item) => item.id)
+      .indexOf(idDocumentBorrar);
+    this.events.splice(index_elem_borrar, 1);
+
+    this.refresh.next();
+  }
+
   // Al guardar un edit d'una tasca
-  submitEditarTasca() {
+  guardar_tasca() {
     let _color = this.colors[this.formulariEditar.value.colorPrimari];
     let paquet_de_dades = `${0};${this.formulariEditar.value.tasca}`;
 
@@ -248,20 +263,18 @@ export class TaskComponent implements OnInit {
       color: _color,
       actions: this.actions,
       allDay: false,
-      draggable: true,
+      draggable: false,
       resizable: {
         beforeStart: true,
         afterEnd: true,
       },
     };
 
-    // Borrar actual de la bdd
-    let idDocumentBorrar = this.dataID.toString();
-    let idUsuari = this.auth.getToken();
-    this.fbService.delete(idUsuari, idDocumentBorrar);
+    this.eliminar_tasca();
 
-    // Crear una amb la nova
-    this.fbService
+    let idUsuari = this.auth.getToken();
+
+    this.fbService // Crear una amb la nova
       .crearEstructuraColeccio('users/' + idUsuari + '/tasks', evento)
       .then(() => {
         this.events = [];
@@ -283,7 +296,7 @@ export class TaskComponent implements OnInit {
         color: _color,
         actions: this.actions,
         allDay: false,
-        draggable: true,
+        draggable: false,
         resizable: {
           beforeStart: true,
           afterEnd: true,

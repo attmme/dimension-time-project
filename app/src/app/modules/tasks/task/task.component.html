@@ -57,14 +57,14 @@
   </mwl-calendar-day-view>
 </div>
 
+
 <!-- El modal per a editar una tasca -->
 <ng-template #modalEditar let-close="close">
-  <form [formGroup]="formulariEditar" (ngSubmit)="submitEditarTasca()">
+  <!-- codi comentat:  (ngSubmit)="submitEditarTasca(buttonType)" -->
+  <form [formGroup]="formulariEditar" >
     <!-- Títol -->
     <div class="modal-header">
       <h5 class="modal-title">Edit task</h5>
-      <h1>{{dataID}}</h1>
-
       <button type="button" class="close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -109,7 +109,11 @@
 
     <!-- Botons -->
     <div class="modal-footer">
-      <button class="btn btn-primary" type="submit" (click)="close()">
+      <button class="btn btn-danger" type="button" (click)="close()" (click)="eliminar_tasca()">
+        Delete
+      </button>
+
+      <button class="btn btn-primary" type="submit" (click)="close()"  (click)="guardar_tasca()">
         Save
       </button>
 
