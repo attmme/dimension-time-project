@@ -17,14 +17,15 @@ export class HomeComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll($event) {
+    /*     if (numb >= 500) {
     const numb = window.scrollY;
-    if (numb >= 500) {
+    
       console.log('1');
       // this.scrolled = true;
     } else {
       console.log('0');
       // this.scrolled = false;
-    }
+    } */
   }
 
 

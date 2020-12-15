@@ -11,7 +11,6 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class LoginFormComponent implements OnInit {
   @Input() error: string | null;
-  //@Output() submitEM = new EventEmitter();
 
   constructor(
     public trucazo_router: Router,
@@ -65,17 +64,6 @@ export class LoginFormComponent implements OnInit {
       return; // No envia res si el form és incorrecte
     }
 
-    // Possiblement BORRAR
-    /*
-    if (this.form.valid) {
-      console.log("Dins del form valid")
-
-      this.submitEM.emit(this.form.value);
-    } else {
-      console.log("Dins del else form valid")
-    }
-     */
-    // Possiblement BORRAR
     this.submitted = true;
   }
 }
