@@ -91,7 +91,9 @@
 <ng-template #templatePersonal let-close="close">
   <!-- Títol -->
   <div class="modal-header">
-    <h5 class="modal-title">Task list usuari {{nomUsuari}}</h5>
+    <h5 class="modal-title">Task list user: </h5>
+    <h4>{{nomUsuari}}</h4>
+
     <button type="button" class="close" (click)="close()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -102,16 +104,12 @@
     <ul>
       <li *ngFor="let list of llista">
         <div>
-          <h1>Usuari:</h1>
-          <p>{{ list.usuari }}</p>
-        </div>
-        <div>
           <h1>Tasca:</h1>
-          <p>{{ list.titol }}</p>
+          <p>{{ list[0].titol }}</p>
         </div>
         <div>
           <h1>Temps:</h1>
-          <p>{{ list.horesMinutsSegons }}</p>
+          <p>{{ list[0].total }}</p>
         </div>
       </li>
     </ul>

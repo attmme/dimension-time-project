@@ -1,31 +1,56 @@
-  .modal-llistat {
-    overflow: hidden;
-    overflow-y: scroll;
-    height: 25em;
+.modal-llistat {
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 25em;
 
-    ul{
+  ul {
+    width: 100%;
+    padding-top: 0.1em;
+
+    li {
+      display: flex;
+      flex-flow: row;
+      justify-content: center;
+
+      align-items: flex-end;
+      align-self: flex-end;
+      align-content: flex-end;
+
       width: 100%;
 
-      li{
-        border: 1px solid red;
-
-        display:flex;
-        flex-flow:row;
-        justify-content: center;
+      div {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-around;
+        align-items: center;
         width: 100%;
-
-        div{
-          display:flex;
-          flex-flow:row;
-          justify-content: space-around;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-
-          border: 1px solid green;
-        }
+        height: 100%;
       }
     }
+    li:nth-child(odd) {
+      background-color: #e8fde7;
+    }
+    li:hover {
+      background-color: #ededed;
+    }
+  }
+}
+
+.modal-header
+{
+  display:flex;
+  flex-flow:row;
+  align-items: baseline;
+
+  .modal-title
+  {
+    font-size: 22px;
+  }
+  h4{
+    padding-left: 0.5em;
+    font-size: 22px;
+    font-weight: bold;
+  }
 }
 
 .mat-toolbar {
