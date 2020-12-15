@@ -55,7 +55,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_FORMATS} from
     RegisterFormComponent,
   ],
   imports: [
-    OwlDateTimeModule, 
+    OwlDateTimeModule,
     OwlNativeDateTimeModule,
 
     CommonModule,

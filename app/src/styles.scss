@@ -4,6 +4,16 @@
 @import '../node_modules/flatpickr/dist/flatpickr.min.css';
 @import "~ng-pick-datetime/assets/style/picker.min.css";
 
+.cdk-overlay-container,
+.cdk-global-overlay-wrapper,
+.cdk-overlay-pane,
+.cdk-overlay-backdrop,
+.cdk-overlay-connected-position-bounding-box,
+.owl-dt-container {
+  z-index: 2000 !important;
+}
+
+
 /* no semblen necessaris */
 /* @import 'https://unpkg.com/bootstrap-css-only@4.4.1/css/bootstrap.min.css" rel="stylesheet';
 @import 'https://unpkg.com/@fortawesome/fontawesome-free@5.15.1/css/all.css" rel="stylesheet';
