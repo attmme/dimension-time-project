@@ -57,17 +57,21 @@ export class HeaderComponent implements OnInit {
 
     // refrescar la llista
     this.agafarTasquesUsuariDB().then(() => {
+
       for (let i = 0; i < this.tasques_trello.length; i++) {
-        llista_reduida.push(
-          this.llista.filter((el) => el.titol == this.tasques_trello[i].nom)
-        );
+
+        let x = this.llista.filter((el) => el.titol == this.tasques_trello[i].nom);
+        if(x.length > 0)
+        {
+          llista_reduida.push(x);
+        }
       }
 
       for (let i = 0; i < llista_reduida.length; i++) {
 
         let t = [
           {
-            titol: llista_reduida[i][0].titol,
+            titol: llista_reduida[i].titol,
             total: llista_reduida[i].reduce(
               (accumulator, currentValue) => {
                 accumulator.horesMinutsSegons = this.adderHMS(
@@ -89,7 +93,6 @@ export class HeaderComponent implements OnInit {
 
     }).then(
       ()=>{
-        console.table('fora: ', this.llista);
         this.modal.open(this.templatePersonal, { size: 'lg' });
       }
     );

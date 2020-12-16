@@ -118,7 +118,9 @@ export class TaskComponent implements OnInit {
       label: '<i class="fas fa-fw fa-trash-alt"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.tasques_calendari = this.tasques_calendari.filter((iEvent) => iEvent !== event);
+        this.tasques_calendari = this.tasques_calendari.filter(
+          (iEvent) => iEvent !== event
+        );
         this.handleEvent('Deleted', event);
       },
     },
@@ -127,7 +129,9 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
     // Llegeix les tasques de trello al carregar l'app
     this.fbService.readColl('tasks').then((data) => {
-      data.map((el, id) => this.tasques_trello.push({ id: id, nom: el['nom'] }));
+      data.map((el, id) =>
+        this.tasques_trello.push({ id: id, nom: el['nom'] })
+      );
     });
 
     this.agafarTasquesDB(); // Agafa les dades de la DB i les passa a la web
@@ -189,17 +193,17 @@ export class TaskComponent implements OnInit {
 
     let esNumero = year1 + month1 + day1 > 0;
     let datesIguals = newdate1 === newdate2;
-    let horesCorrectes = hora2 >= hora1;
-    let minutsCorrectes = minuts2 >= minuts1;
-    let horaRepetida = hora2 == hora1 && minuts2 == minuts1;
 
-    return (
-      datesIguals &&
-      esNumero &&
-      horesCorrectes &&
-      minutsCorrectes &&
-      !horaRepetida
-    );
+    hora1 = this.zeroPad(hora1, 2);
+    hora2 = this.zeroPad(hora2, 2);
+    minuts1 = this.zeroPad(minuts1, 2);
+    minuts2 = this.zeroPad(minuts2, 2);
+
+    let str1 = `${hora1}:${minuts1}`;
+    let str2 = `${hora2}:${minuts2}`;
+    let horesCorrectes = str2 > str1;
+
+    return datesIguals && esNumero && horesCorrectes;
   }
 
   // Agafa les dades de la DB i les passa a la web
@@ -229,6 +233,11 @@ export class TaskComponent implements OnInit {
         });
         this.refresh.next();
       });
+  }
+
+  zeroPad(num, places) {
+    let zero = places - num.toString().length + 1;
+    return Array(+(zero > 0 && zero)).join('0') + num;
   }
 
   // Entra al clickar u dia per crear una nova tasca
