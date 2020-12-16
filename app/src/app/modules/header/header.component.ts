@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
 
     private service: AuthService,
     private fbService: FirebaseService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.agafarTasquesUsuariDB();
@@ -59,19 +59,16 @@ export class HeaderComponent implements OnInit {
     this.agafarTasquesUsuariDB().then(() => {
 
       for (let i = 0; i < this.tasques_trello.length; i++) {
-
-        let x = this.llista.filter((el) => el.titol == this.tasques_trello[i].nom);
-        if(x.length > 0)
-        {
-          llista_reduida.push(x);
+        let x = this.llista.filter(el => el.titol == this.tasques_trello[i].nom);
+        if (x.length > 0) {
+          llista_reduida.push(x)
         }
       }
 
       for (let i = 0; i < llista_reduida.length; i++) {
-
         let t = [
           {
-            titol: llista_reduida[i].titol,
+            titol: llista_reduida[i][0].titol,
             total: llista_reduida[i].reduce(
               (accumulator, currentValue) => {
                 accumulator.horesMinutsSegons = this.adderHMS(
@@ -88,11 +85,12 @@ export class HeaderComponent implements OnInit {
         llista_tmp.push(t);
       }
 
+
       this.llista = [];
       this.llista = [...llista_tmp];
 
     }).then(
-      ()=>{
+      () => {
         this.modal.open(this.templatePersonal, { size: 'lg' });
       }
     );
